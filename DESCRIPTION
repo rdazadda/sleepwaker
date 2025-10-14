@@ -1,0 +1,29 @@
+Package: sleepwaker
+Title: Invert Sleep and Wake Periods from Accelerometry Data
+Version: 0.1.0
+Authors@R: c(
+    person("Raymond Dacosta", "Azadda", 
+           email = "rdazadda@alaska.edu",
+           role = c("aut", "cre")),
+    person("CoAuthor First", "CoAuthor Last",
+           email = "coauthor.email@example.com",
+           role = "aut"))
+Description: Processes batch sleep export data from accelerometry devices and 
+    inverts sleep periods to wake periods. Uses output from validated sleep 
+    detection algorithms (Cole-Kripke (Adult), Sadeh (Youth)) to create wake periods, 
+    which enable researchers to constrain physical activity analysis to waking hours 
+    only. This prevents artificial inflation of sedentary time estimates by 
+    excluding sleep from behavioral assessments. Provides automated workflow for 
+    large-scale accelerometry studies.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends: 
+    R (>= 3.5.0)
+Suggests: 
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+URL: https://github.com/rdazadda/sleepwaker
+BugReports: https://github.com/rdazadda/sleepwaker/issues

@@ -77,7 +77,7 @@ the Numbers Team in particluar Prof. Andrew (Andy) Grogan-Kaylor and
 KyungSook Lee, PhD for their guidance, mentorship, and contributions to
 the development of this package.
 
-## Contact
+\##Contact
 
 - **Developer**: Raymond Dacosta Azadda (<rdazadda@alaska.edu>)
 - **Report Issues**: [GitHub

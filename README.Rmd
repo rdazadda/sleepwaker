@@ -73,7 +73,7 @@ This package was developed at the **Center for Alaska Native Health Research (CA
 
 This work was supported by research conducted at CANHR. I acknowledge the Numbers Team in particluar Prof. Andrew (Andy) Grogan-Kaylor and KyungSook Lee, PhD  for their guidance, mentorship, and contributions to the development of this package.
 
-## Contact
+##Contact
 
 - **Developer**: Raymond Dacosta Azadda (rdazadda@alaska.edu)
 - **Report Issues**: [GitHub Issues](https://github.com/rdazadda/sleepwaker/issues)

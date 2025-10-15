@@ -63,9 +63,9 @@
 #' }
 #'
 #' @references
-#' Cole RJ, Kripke DF, Gruen W, Mullaney DJ, Gillin JC (1992).
-#' Automatic sleep/wake identification from wrist activity.
-#' Sleep, 15(5):461-469.
+#' Cole, R. J., Kripke, D. F., Gruen, W., Mullaney, D. J., & Gillin, J. C. (1992). Automatic sleep/wake identification from wrist activity. Sleep, 15(5), 461–469. https://doi.org/10.1093/sleep/15.5.461
+#'
+#'
 #'
 #' @export
 sleepwaker <- function(data, input.type = "raw", output.type = "sleep",

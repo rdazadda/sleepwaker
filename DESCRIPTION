@@ -1,7 +1,7 @@
 Package: sleepwaker
 Title: Invert Sleep and Wake Periods from Accelerometry Data
 Version: 0.1.0
-Authors@R: c(
+Authors@R: 
     person("Raymond Dacosta", "Azadda", 
            email = "rdazadda@alaska.edu",
            role = c("aut", "cre"))

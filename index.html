@@ -52,388 +52,98 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="sleepwaker-invert-sleep-and-wake-periods-from-accelerometry-data">sleepwaker: Invert Sleep and Wake Periods from Accelerometry Data<a class="anchor" aria-label="anchor" href="#sleepwaker-invert-sleep-and-wake-periods-from-accelerometry-data"></a>
+<div class="page-header"><h1 id="sleepwaker">sleepwaker<a class="anchor" aria-label="anchor" href="#sleepwaker"></a>
 </h1></div>
-<!-- badges: start -->
-
+<p>Invert sleep periods to wake periods from accelerometry data in particular Actigraph Data.</p>
 <div class="section level2">
-<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+<h2 id="why">Why?<a class="anchor" aria-label="anchor" href="#why"></a>
 </h2>
-<p>The <strong>sleepwaker</strong> package provides automated methods for inverting sleep periods to wake periods in accelerometry data. This addresses a fundamental methodological challenge in physical activity research: the artificial inflation of sedentary time estimates when sleep periods are included in 24-hour behavioral assessments.</p>
-<div class="section level3">
-<h3 id="the-scientific-problem">The Scientific Problem<a class="anchor" aria-label="anchor" href="#the-scientific-problem"></a>
-</h3>
-<p>Current accelerometry studies analyzing 24-hour periods often include sleep as part of the measurement window. However, sleep periods (typically 6-9 hours) are algorithmically classified as sedentary behavior, resulting in:</p>
-<ul>
-<li>Sedentary time estimates inflated by 50-90% of the 24-hour period</li>
-<li>Conflation of sleep with true waking sedentary behavior</li>
-<li>Spurious associations between “sedentary time” and health outcomes that may be driven by sleep patterns rather than waking behavior</li>
-<li>Inability to accurately quantify waking sedentary behavior patterns</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="the-solution">The Solution<a class="anchor" aria-label="anchor" href="#the-solution"></a>
-</h3>
-<p><strong>sleepwaker</strong> implements an automated inversion algorithm that:</p>
-<ol style="list-style-type: decimal">
-<li>Extracts sleep periods detected by validated algorithms (Cole-Kripke, Sadeh)</li>
-<li>Identifies consecutive sleep episodes chronologically</li>
-<li>Inverts the temporal structure to generate complement wake periods</li>
-<li>Produces wake-period data suitable for constraining behavioral analysis to waking hours</li>
-</ol>
-<p>This approach enables researchers to exclude sleep from sedentary behavior assessments, yielding more accurate characterizations of waking behavioral patterns.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="key-features">Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a>
-</h2>
-<div class="section level3">
-<h3 id="core-functionality">Core Functionality<a class="anchor" aria-label="anchor" href="#core-functionality"></a>
-</h3>
-<ul>
-<li>
-<strong>One-Step Processing</strong>: Streamlined workflow from batch sleep export to wake periods</li>
-<li>
-<strong>Algorithm Compatibility</strong>: Supports output from Cole-Kripke (adult) and Sadeh (youth) sleep detection algorithms</li>
-<li>
-<strong>Flexible Input Handling</strong>: Processes raw batch exports or pre-formatted sleep/wake data</li>
-<li>
-<strong>Multi-Subject Scalability</strong>: Efficiently handles large datasets with hundreds of participants</li>
-<li>
-<strong>Quality Validation</strong>: Built-in checks for data integrity and format compliance</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="research-applications">Research Applications<a class="anchor" aria-label="anchor" href="#research-applications"></a>
-</h3>
-<ul>
-<li>
-<strong>Sedentary Behavior Studies</strong>: Accurate quantification of waking sedentary time</li>
-<li>
-<strong>Physical Activity Research</strong>: Analysis of MVPA constrained to waking hours</li>
-<li>
-<strong>Sleep-Wake Pattern Analysis</strong>: Investigation of behavioral rhythms</li>
-<li>
-<strong>Epidemiological Studies</strong>: Large-scale population health assessments</li>
-<li>
-<strong>Intervention Research</strong>: Pre-post comparisons of waking behavior patterns</li>
-</ul>
-</div>
+<p>When analyzing 24-hour accelerometry data, sleep periods inflate sedentary time estimates and using others measures by Actilife software did not prove real good. <strong>sleepwaker</strong> solves this by converting sleep periods to wake periods, enabling analysis of waking behavior only by using this in the subject log diary to restrict the analysis on wake periods.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="section level3">
-<h3 id="development-version">Development Version<a class="anchor" aria-label="anchor" href="#development-version"></a>
-</h3>
-<p>Install the development version from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install devtools if not already installed</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># Install sleepwaker</span></span>
+<code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rdazadda/sleepwaker"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="system-requirements">System Requirements<a class="anchor" aria-label="anchor" href="#system-requirements"></a>
-</h3>
-<ul>
-<li>R (≥ 3.5.0)</li>
-<li>Compatible with Windows, macOS, and Linux operating systems</li>
-</ul>
-</div>
-</div>
 <div class="section level2">
-<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+<h2 id="quick-example">Quick Example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
 </h2>
-<div class="section level3">
-<h3 id="basic-workflow">Basic Workflow<a class="anchor" aria-label="anchor" href="#basic-workflow"></a>
-</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rdazadda/sleepwaker" class="external-link">sleepwaker</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Load ActiGraph batch sleep export data</span></span>
-<span><span class="va">sleep_data</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span><span class="st">"BatchSleepExportDetails.csv"</span><span class="op">)</span></span>
+<span><span class="co"># Load ActiGraph batch sleep export</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span><span class="st">"BatchSleepExportDetails.csv"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Convert sleep periods to wake periods</span></span>
-<span><span class="va">wake_periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">sleep_data</span>,</span>
-<span>  input.type <span class="op">=</span> <span class="st">"raw"</span>,</span>
-<span>  output.type <span class="op">=</span> <span class="st">"wake"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Export results for downstream analysis</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">wake_periods</span>, <span class="st">"wake_periods.csv"</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="advanced-usage">Advanced Usage<a class="anchor" aria-label="anchor" href="#advanced-usage"></a>
-</h3>
-<div class="section level4">
-<h4 id="direct-export-to-file">Direct Export to File<a class="anchor" aria-label="anchor" href="#direct-export-to-file"></a>
-</h4>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Process and save in single step</span></span>
-<span><span class="va">wake_periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">sleep_data</span>,</span>
-<span>  input.type <span class="op">=</span> <span class="st">"raw"</span>,</span>
-<span>  output.type <span class="op">=</span> <span class="st">"wake"</span>,</span>
-<span>  output.file <span class="op">=</span> <span class="st">"wake_periods.csv"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="multi-step-processing">Multi-Step Processing<a class="anchor" aria-label="anchor" href="#multi-step-processing"></a>
-</h4>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Step 1: Generate formatted sleep periods</span></span>
-<span><span class="va">sleep_periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">sleep_data</span>,</span>
-<span>  input.type <span class="op">=</span> <span class="st">"raw"</span>,</span>
-<span>  output.type <span class="op">=</span> <span class="st">"sleep"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Step 2: Perform inversion</span></span>
-<span><span class="va">wake_periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">sleep_periods</span>,</span>
-<span>  input.type <span class="op">=</span> <span class="st">"sleep"</span>,</span>
-<span>  output.type <span class="op">=</span> <span class="st">"wake"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
+<span><span class="co"># Convert sleep to wake periods</span></span>
+<span><span class="va">wake_periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">data</span>, </span>
+<span>                           input.type <span class="op">=</span> <span class="st">"raw"</span>, </span>
+<span>                           output.type <span class="op">=</span> <span class="st">"wake"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="methodological-details">Methodological Details<a class="anchor" aria-label="anchor" href="#methodological-details"></a>
-</h2>
-<div class="section level3">
-<h3 id="the-inversion-algorithm">The Inversion Algorithm<a class="anchor" aria-label="anchor" href="#the-inversion-algorithm"></a>
-</h3>
-<p>The core algorithm implements temporal inversion through consecutive period pairing:</p>
-<p><strong>Input:</strong> Chronologically ordered sleep periods for each subject<br><strong>Process:</strong> For periods <em>i</em> and <em>i+1</em>:</p>
-<ul>
-<li>Wake period start = Sleep period <em>i</em> end time</li>
-<li>Wake period end = Sleep period <em>i+1</em> start time</li>
-</ul>
-<p><strong>Output:</strong> Wake periods representing intervals between consecutive sleep episodes</p>
-<p><strong>Important:</strong> The algorithm generates <em>n-1</em> wake periods from <em>n</em> sleep periods per subject, as the final sleep period lacks a subsequent period for pairing.</p>
-</div>
-<div class="section level3">
-<h3 id="data-format-requirements">Data Format Requirements<a class="anchor" aria-label="anchor" href="#data-format-requirements"></a>
-</h3>
-<div class="section level4">
-<h4 id="input-format-raw-batch-export">Input Format (Raw Batch Export)<a class="anchor" aria-label="anchor" href="#input-format-raw-batch-export"></a>
-</h4>
-<p>Required columns:</p>
-<ul>
-<li>
-<code>Subject Name</code>: Participant identifier</li>
-<li>
-<code>In Bed Time</code>: Sleep onset timestamp (MM/DD/YYYY HH:MM:SS AM/PM)</li>
-<li>
-<code>Out Bed Time</code>: Sleep offset timestamp (MM/DD/YYYY HH:MM:SS AM/PM)</li>
-</ul>
-</div>
-<div class="section level4">
-<h4 id="output-format-wake-periods">Output Format (Wake Periods)<a class="anchor" aria-label="anchor" href="#output-format-wake-periods"></a>
-</h4>
-<p>Generated columns:</p>
-<ul>
-<li>
-<code>Subject Name</code>: Participant identifier</li>
-<li>
-<code>On Date</code>: Wake period start date</li>
-<li>
-<code>On Time</code>: Wake period start time (12-hour format)</li>
-<li>
-<code>Off Date</code>: Wake period end date<br>
-</li>
-<li>
-<code>Off Time</code>: Wake period end time (12-hour format)</li>
-<li>
-<code>Category</code>: User annotation field (empty by default)</li>
-</ul>
-</div>
-</div>
-<div class="section level3">
-<h3 id="supported-sleep-detection-algorithms">Supported Sleep Detection Algorithms<a class="anchor" aria-label="anchor" href="#supported-sleep-detection-algorithms"></a>
-</h3>
-<p><strong>sleepwaker</strong> processes output from validated accelerometry sleep detection algorithms:</p>
-<ul>
-<li>
-<strong>Cole-Kripke Algorithm</strong> (Cole et al., 1992): Validated for adult populations</li>
-<li>
-<strong>Sadeh Algorithm</strong> (Sadeh et al., 1994): Validated for pediatric and adolescent populations</li>
-<li>
-<strong>Compatible Formats</strong>: Any batch export matching the required column structure</li>
-</ul>
-</div>
-</div>
-<div class="section level2">
-<h2 id="example-complete-research-workflow">Example: Complete Research Workflow<a class="anchor" aria-label="anchor" href="#example-complete-research-workflow"></a>
-</h2>
-<div class="section level3">
-<h3 id="step-1-data-collection">Step 1: Data Collection<a class="anchor" aria-label="anchor" href="#step-1-data-collection"></a>
-</h3>
-<ol style="list-style-type: decimal">
-<li>Deploy ActiGraph accelerometers for 24-hour monitoring</li>
-<li>Retrieve devices and download data using ActiLife software</li>
-<li>Apply appropriate sleep detection algorithm:
-<ul>
-<li>Adults: Cole-Kripke algorithm</li>
-<li>Youth: Sadeh algorithm</li>
-</ul>
-</li>
-</ol>
-</div>
-<div class="section level3">
-<h3 id="step-2-batch-export">Step 2: Batch Export<a class="anchor" aria-label="anchor" href="#step-2-batch-export"></a>
-</h3>
-<p>In ActiLife software:</p>
-<ol style="list-style-type: decimal">
-<li>Navigate to: <strong>File → Batch Processing → Sleep Export</strong>
-</li>
-<li>Select participants</li>
-<li>Export to CSV format</li>
-<li>Save as: <code>BatchSleepExportDetails.csv</code>
-</li>
-</ol>
-</div>
-<div class="section level3">
-<h3 id="step-3-data-processing-in-r">Step 3: Data Processing in R<a class="anchor" aria-label="anchor" href="#step-3-data-processing-in-r"></a>
-</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rdazadda/sleepwaker" class="external-link">sleepwaker</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Import batch sleep export</span></span>
-<span><span class="va">raw_data</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span><span class="st">"BatchSleepExportDetails.csv"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Examine data structure</span></span>
-<span><span class="fu">glimpse</span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Generate wake periods</span></span>
-<span><span class="va">wake_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">raw_data</span>,</span>
-<span>  input.type <span class="op">=</span> <span class="st">"raw"</span>,</span>
-<span>  output.type <span class="op">=</span> <span class="st">"wake"</span>,</span>
-<span>  output.file <span class="op">=</span> <span class="st">"wake_periods_for_analysis.csv"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Verify output</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Processed"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">wake_data</span><span class="op">$</span><span class="va">`Subject Name`</span><span class="op">)</span><span class="op">)</span>, <span class="st">"participants\n"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Generated"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">wake_data</span><span class="op">)</span>, <span class="st">"wake periods\n"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Preview results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wake_data</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="step-4-integration-with-activity-analysis">Step 4: Integration with Activity Analysis<a class="anchor" aria-label="anchor" href="#step-4-integration-with-activity-analysis"></a>
-</h3>
-<p>Import <code>wake_periods_for_analysis.csv</code> into your activity analysis workflow to constrain sedentary behavior and MVPA calculations to waking hours only.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="validation-and-quality-assurance">Validation and Quality Assurance<a class="anchor" aria-label="anchor" href="#validation-and-quality-assurance"></a>
-</h2>
-<div class="section level3">
-<h3 id="input-validation">Input Validation<a class="anchor" aria-label="anchor" href="#input-validation"></a>
-</h3>
-<p>The package implements comprehensive validation checks:</p>
-<ul>
-<li>Data frame structure verification</li>
-<li>Required column presence confirmation</li>
-<li>Datetime format parsing with explicit error messaging</li>
-<li>Subject-level data sufficiency assessment (minimum 2 periods required)</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="edge-case-handling">Edge Case Handling<a class="anchor" aria-label="anchor" href="#edge-case-handling"></a>
-</h3>
-<ul>
-<li>
-<strong>Single Period Subjects</strong>: Warning issued, subject skipped</li>
-<li>
-<strong>Irregular Sleep Patterns</strong>: Chronological sorting ensures correct pairing</li>
-<li>
-<strong>Missing Data</strong>: Explicit error messages with troubleshooting guidance</li>
-<li>
-<strong>Format Inconsistencies</strong>: Validation with clear error reporting</li>
-</ul>
-</div>
-</div>
-<div class="section level2">
-<h2 id="performance-characteristics">Performance Characteristics<a class="anchor" aria-label="anchor" href="#performance-characteristics"></a>
+<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
 <ul>
 <li>
-<strong>Processing Speed</strong>: Scales linearly with dataset size</li>
+<strong>One-step processing</strong> from batch export to wake periods</li>
 <li>
-<strong>Memory Efficiency</strong>: Processes data frame subsets by subject</li>
+<strong>Works with</strong> Cole-Kripke and Sadeh algorithms</li>
 <li>
-<strong>Typical Performance</strong>: ~1000 participants processed in &lt;5 seconds on standard hardware</li>
+<strong>Handles multiple subjects</strong> automatically</li>
+<li>
+<strong>Export directly</strong> to CSV for analysis</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="learn-more">Learn More<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h2>
+<ul>
+<li><a href="https://rdazadda.github.io/sleepwaker/articles/getting-started.html">Getting Started Guide</a></li>
+<li><a href="https://rdazadda.github.io/sleepwaker/reference/index.html">Function Reference</a></li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>If you use <strong>sleepwaker</strong> in your research, please cite:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>Azadda, <span class="fu">R.D.</span> (<span class="dv">2025</span>). sleepwaker<span class="sc">:</span> Invert Sleep and Wake Periods from </span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  Accelerometry Data. R package version <span class="dv">0</span>.<span class="dv">1</span>.<span class="fl">0.</span> </span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>rdazadda<span class="sc">/</span>sleepwaker</span></code></pre></div>
-<div class="section level3">
-<h3 id="related-publications">Related Publications<a class="anchor" aria-label="anchor" href="#related-publications"></a>
-</h3>
-<p>This package supports the methodology described in:</p>
-<p>[Your manuscript citation will go here upon publication]</p>
-</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>Azadda, <span class="fu">R.D.</span> (<span class="dv">2025</span>). sleepwaker<span class="sc">:</span> Invert Sleep and Wake Periods </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  from Accelerometry Data. R package version <span class="dv">0</span>.<span class="dv">1</span>.<span class="fl">0.</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>rdazadda<span class="sc">/</span>sleepwaker</span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
 </h2>
-<p>Cole, R. J., Kripke, D. F., Gruen, W., Mullaney, D. J., &amp; Gillin, J. C. (1992). Automatic sleep/wake identification from wrist activity. <em>Sleep</em>, 15(5), 461-469. <a href="https://doi.org/10.1093/sleep/15.5.461" class="external-link uri">https://doi.org/10.1093/sleep/15.5.461</a></p>
-<p>Sadeh, A., Sharkey, K. M., &amp; Carskadon, M. A. (1994). Activity-based sleep-wake identification: An empirical test of methodological issues. <em>Sleep</em>, 17(3), 201-207. <a href="https://doi.org/10.1093/sleep/17.3.201" class="external-link uri">https://doi.org/10.1093/sleep/17.3.201</a></p>
-</div>
-<div class="section level2">
-<h2 id="getting-help">Getting Help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
-</h2>
-<div class="section level3">
-<h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
-</h3>
 <ul>
 <li>
-<strong>Function Reference</strong>: Browse detailed function documentation at <a href="https://rdazadda.github.io/sleepwaker/reference/" class="uri">https://rdazadda.github.io/sleepwaker/reference/</a>
+<strong>Report issues</strong>: <a href="https://github.com/rdazadda/sleepwaker/issues" class="external-link">GitHub Issues</a>
 </li>
 <li>
-<strong>Package Help</strong>: Access within R using <code><a href="https://rdrr.io/pkg/sleepwaker/man" class="external-link">help(package = "sleepwaker")</a></code>
-</li>
-<li>
-<strong>Function Help</strong>: View specific function documentation with <code><a href="reference/sleepwaker.html">?sleepwaker</a></code>
+<strong>Email</strong>: <a href="mailto:rdazadda@alaska.edu" class="email">rdazadda@alaska.edu</a>
 </li>
 </ul>
-</div>
-<div class="section level3">
-<h3 id="support">Support<a class="anchor" aria-label="anchor" href="#support"></a>
-</h3>
-<ul>
-<li>
-<strong>Bug Reports</strong>: Submit issues at <a href="https://github.com/rdazadda/sleepwaker/issues" class="external-link uri">https://github.com/rdazadda/sleepwaker/issues</a>
-</li>
-<li>
-<strong>Feature Requests</strong>: Open a discussion at <a href="https://github.com/rdazadda/sleepwaker/discussions" class="external-link uri">https://github.com/rdazadda/sleepwaker/discussions</a>
-</li>
-<li>
-<strong>Questions</strong>: Contact the maintainer or post in discussions</li>
-</ul>
-</div>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
 </h2>
-<p>Development of this package was supported by research conducted at the University of Alaska.</p>
+<p>This package was developed at the <strong>Center for Alaska Native Health Research (CANHR)</strong>, University of Alaska Fairbanks.</p>
+<p><strong>Principal Advisor:</strong> Andrew (Andy) Grogan-Kaylor</p>
+<p><strong>Developer:</strong> Raymond Dacosta Azadda</p>
+<p>This work was supported by research conducted at CANHR. I acknowledge the Numbers Team in particluar Prof. Andrew (Andy) Grogan-Kaylor and KyungSook Lee, PhD for their guidance, mentorship, and contributions to the development of this package.</p>
+</div>
+<div class="section level2">
+<h2 id="contact-1">Contact<a class="anchor" aria-label="anchor" href="#contact-1"></a>
+</h2>
+<ul>
+<li>
+<strong>Developer</strong>: Raymond Dacosta Azadda (<a href="mailto:rdazadda@alaska.edu" class="email">rdazadda@alaska.edu</a>)</li>
+<li>
+<strong>Report Issues</strong>: <a href="https://github.com/rdazadda/sleepwaker/issues" class="external-link">GitHub Issues</a>
+</li>
+</ul>
 <hr>
-<p><strong>Developed by:</strong> Raymond Dacosta Azadda<br><strong>Maintainer:</strong> Raymond Dacosta Azadda (<a href="mailto:rdazadda@alaska.edu" class="email">rdazadda@alaska.edu</a>)<br><strong>Repository:</strong> <a href="https://github.com/rdazadda/sleepwaker" class="external-link uri">https://github.com/rdazadda/sleepwaker</a></p>
+<p><strong>Affiliation:</strong> Center for Alaska Native Health Research (CANHR)<br><strong>Institution:</strong> University of Alaska Fairbanks</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -468,12 +178,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-</ul>
-</div>
+
 
   </aside>
 </div>

@@ -1,4 +1,4 @@
-#' Create Subject Log from Raw Sleep Data
+#' Creating Subject Log from Raw Sleep Data
 #'
 #' Converts batch export format to subject log diary format by splitting datetime
 #' into separate date and time columns. Optionally inverts sleep periods to wake

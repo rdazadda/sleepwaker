@@ -1,4 +1,4 @@
-#' Extract Sleep Period Columns from Batch Sleep Export
+#' Extracting Sleep Period Columns from Batch Sleep Export
 #'
 #' Extracts essential columns required for sleep period inversion from batch
 #' sleep export data: Subject Name, In Bed Time, and Out Bed Time.

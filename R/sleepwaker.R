@@ -1,4 +1,4 @@
-#' Invert Sleep and Wake Periods from Accelerometry Data
+#' Inverting Sleep and Wake Periods from Accelerometry Data
 #'
 #' Converts between sleep and wake periods from accelerometry batch export data.
 #' Uses output from validated sleep detection algorithms (Cole-Kripke (Adult), Sadeh (Youth))

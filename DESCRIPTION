@@ -6,6 +6,8 @@ Authors@R: c(
            email = "rdazadda@alaska.edu",
            role = c("aut", "cre"))
            
+           
+           
 Description: Processes batch sleep export data from accelerometry devices and 
     inverts sleep periods to wake periods. Uses output from validated sleep 
     detection algorithms (Cole-Kripke (Adult), Sadeh (Youth)) to create wake periods, 

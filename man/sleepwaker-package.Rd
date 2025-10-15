@@ -10,17 +10,8 @@ Processes batch sleep export data from accelerometry devices and inverts sleep p
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/yourusername/sleepwaker}
-  \item Report bugs at \url{https://github.com/yourusername/sleepwaker/issues}
-}
-
-}
-\author{
-\strong{Maintainer}: Raymond Dacosta Azadda \email{rdazadda@alaska.edu}
-
-Authors:
-\itemize{
-  \item CoAuthor First CoAuthor Last \email{coauthor.email@example.com}
+  \item \url{https://github.com/rdazadda/sleepwaker}
+  \item Report bugs at \url{https://github.com/rdazadda/sleepwaker/issues}
 }
 
 }

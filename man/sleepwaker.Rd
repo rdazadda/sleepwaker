@@ -2,7 +2,7 @@
 % Please edit documentation in R/sleepwaker.R
 \name{sleepwaker}
 \alias{sleepwaker}
-\title{Invert Sleep and Wake Periods from Accelerometry Data}
+\title{Inverting Sleep and Wake Periods from Accelerometry Data}
 \usage{
 sleepwaker(data, input.type = "raw", output.type = "sleep", output.file = NULL)
 }
@@ -73,7 +73,5 @@ wake_periods <- sleepwaker(batch_data, input.type = "raw",
 
 }
 \references{
-Cole RJ, Kripke DF, Gruen W, Mullaney DJ, Gillin JC (1992).
-Automatic sleep/wake identification from wrist activity.
-Sleep, 15(5):461-469.
+Cole, R. J., Kripke, D. F., Gruen, W., Mullaney, D. J., & Gillin, J. C. (1992). Automatic sleep/wake identification from wrist activity. Sleep, 15(5), 461–469. https://doi.org/10.1093/sleep/15.5.461
 }

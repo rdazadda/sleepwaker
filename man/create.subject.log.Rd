@@ -2,7 +2,7 @@
 % Please edit documentation in R/create.subject.log.R
 \name{create.subject.log}
 \alias{create.subject.log}
-\title{Create Subject Log from Raw Sleep Data}
+\title{Creating Subject Log from Raw Sleep Data}
 \usage{
 create.subject.log(sleep.data, output.type = "sleep")
 }
@@ -18,7 +18,7 @@ Data frame with columns 'Subject Name', 'On Date', 'On Time',
 'Off Date', 'Off Time', and 'Category'
 }
 \description{
-Converts batch export format to subject log diary format by splitting datetime
+Convert batch export format to subject log diary format by splitting datetime
 into separate date and time columns. Optionally inverts sleep periods to wake
 periods in a single step.
 }

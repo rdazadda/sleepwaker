@@ -1,297 +1,84 @@
 ---
 output: github_document
 ---
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
   out.width = "100%"
 )
 ```
 
-# sleepwaker: Invert Sleep and Wake Periods from Accelerometry Data
+# sleepwaker
 
-<!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-<!-- badges: end -->
+Invert sleep periods to wake periods from accelerometry data in particular Actigraph Data.
 
-## Overview
+## Why?
 
-The **sleepwaker** package provides automated methods for inverting sleep periods to wake periods in accelerometry data. This addresses a fundamental methodological challenge in physical activity research: the artificial inflation of sedentary time estimates when sleep periods are included in 24-hour behavioral assessments.
-
-### The Scientific Problem
-
-Current accelerometry studies analyzing 24-hour periods often include sleep as part of the measurement window. However, sleep periods (typically 6-9 hours) are algorithmically classified as sedentary behavior, resulting in:
-
-- Sedentary time estimates inflated by 50-90% of the 24-hour period
-- Conflation of sleep with true waking sedentary behavior
-- Spurious associations between "sedentary time" and health outcomes that may be driven by sleep patterns rather than waking behavior
-- Inability to accurately quantify waking sedentary behavior patterns
-
-### The Solution
-
-**sleepwaker** implements an automated inversion algorithm that:
-
-1. Extracts sleep periods detected by validated algorithms (Cole-Kripke, Sadeh)
-2. Identifies consecutive sleep episodes chronologically
-3. Inverts the temporal structure to generate complement wake periods
-4. Produces wake-period data suitable for constraining behavioral analysis to waking hours
-
-This approach enables researchers to exclude sleep from sedentary behavior assessments, yielding more accurate characterizations of waking behavioral patterns.
-
-## Key Features
-
-### Core Functionality
-
-- **One-Step Processing**: Streamlined workflow from batch sleep export to wake periods
-- **Algorithm Compatibility**: Supports output from Cole-Kripke (adult) and Sadeh (youth) sleep detection algorithms
-- **Flexible Input Handling**: Processes raw batch exports or pre-formatted sleep/wake data
-- **Multi-Subject Scalability**: Efficiently handles large datasets with hundreds of participants
-- **Quality Validation**: Built-in checks for data integrity and format compliance
-
-### Research Applications
-
-- **Sedentary Behavior Studies**: Accurate quantification of waking sedentary time
-- **Physical Activity Research**: Analysis of MVPA constrained to waking hours
-- **Sleep-Wake Pattern Analysis**: Investigation of behavioral rhythms
-- **Epidemiological Studies**: Large-scale population health assessments
-- **Intervention Research**: Pre-post comparisons of waking behavior patterns
+When analyzing 24-hour accelerometry data, sleep periods inflate sedentary time estimates and using others measures by Actilife software did not prove real good. **sleepwaker** solves this by converting sleep periods to wake periods, enabling analysis of waking behavior only by using this in the subject log diary to restrict the analysis on wake periods.
 
 ## Installation
-
-### Development Version
-
-Install the development version from GitHub:
 ```{r installation, eval=FALSE}
-# Install devtools if not already installed
-if (!requireNamespace("devtools", quietly = TRUE)) {
-    install.packages("devtools")
-}
-
-# Install sleepwaker
+# Install from GitHub
 devtools::install_github("rdazadda/sleepwaker")
 ```
 
-### System Requirements
-
-- R (≥ 3.5.0)
-- Compatible with Windows, macOS, and Linux operating systems
-
-## Usage
-
-### Basic Workflow
-```{r basic-usage, eval=FALSE}
+## Quick Example
+```{r example, eval=FALSE}
 library(sleepwaker)
 library(readr)
 
-# Load ActiGraph batch sleep export data
-sleep_data <- read_csv("BatchSleepExportDetails.csv")
+# Load ActiGraph batch sleep export
+data <- read_csv("BatchSleepExportDetails.csv")
 
-# Convert sleep periods to wake periods
-wake_periods <- sleepwaker(
-  data = sleep_data,
-  input.type = "raw",
-  output.type = "wake"
-)
-
-# Export results for downstream analysis
-write.csv(wake_periods, "wake_periods.csv", row.names = FALSE)
+# Convert sleep to wake periods
+wake_periods <- sleepwaker(data, 
+                           input.type = "raw", 
+                           output.type = "wake")
 ```
 
-### Advanced Usage
+## Features
 
-#### Direct Export to File
-```{r export-usage, eval=FALSE}
-# Process and save in single step
-wake_periods <- sleepwaker(
-  data = sleep_data,
-  input.type = "raw",
-  output.type = "wake",
-  output.file = "wake_periods.csv"
-)
-```
+- **One-step processing** from batch export to wake periods
+- **Works with** Cole-Kripke and Sadeh algorithms
+- **Handles multiple subjects** automatically
+- **Export directly** to CSV for analysis
 
-#### Multi-Step Processing
-```{r multistep-usage, eval=FALSE}
-# Step 1: Generate formatted sleep periods
-sleep_periods <- sleepwaker(
-  data = sleep_data,
-  input.type = "raw",
-  output.type = "sleep"
-)
+## Learn More
 
-# Step 2: Perform inversion
-wake_periods <- sleepwaker(
-  data = sleep_periods,
-  input.type = "sleep",
-  output.type = "wake"
-)
-```
-
-## Methodological Details
-
-### The Inversion Algorithm
-
-The core algorithm implements temporal inversion through consecutive period pairing:
-
-**Input:** Chronologically ordered sleep periods for each subject  
-**Process:** For periods *i* and *i+1*:
-
-- Wake period start = Sleep period *i* end time
-- Wake period end = Sleep period *i+1* start time
-
-**Output:** Wake periods representing intervals between consecutive sleep episodes
-
-**Important:** The algorithm generates *n-1* wake periods from *n* sleep periods per subject, as the final sleep period lacks a subsequent period for pairing.
-
-### Data Format Requirements
-
-#### Input Format (Raw Batch Export)
-
-Required columns:
-
-- `Subject Name`: Participant identifier
-- `In Bed Time`: Sleep onset timestamp (MM/DD/YYYY HH:MM:SS AM/PM)
-- `Out Bed Time`: Sleep offset timestamp (MM/DD/YYYY HH:MM:SS AM/PM)
-
-#### Output Format (Wake Periods)
-
-Generated columns:
-
-- `Subject Name`: Participant identifier
-- `On Date`: Wake period start date
-- `On Time`: Wake period start time (12-hour format)
-- `Off Date`: Wake period end date  
-- `Off Time`: Wake period end time (12-hour format)
-- `Category`: User annotation field (empty by default)
-
-### Supported Sleep Detection Algorithms
-
-**sleepwaker** processes output from validated accelerometry sleep detection algorithms:
-
-- **Cole-Kripke Algorithm** (Cole et al., 1992): Validated for adult populations
-- **Sadeh Algorithm** (Sadeh et al., 1994): Validated for pediatric and adolescent populations
-- **Compatible Formats**: Any batch export matching the required column structure
-
-## Example: Complete Research Workflow
-
-### Step 1: Data Collection
-
-1. Deploy ActiGraph accelerometers for 24-hour monitoring
-2. Retrieve devices and download data using ActiLife software
-3. Apply appropriate sleep detection algorithm:
-   - Adults: Cole-Kripke algorithm
-   - Youth: Sadeh algorithm
-
-### Step 2: Batch Export
-
-In ActiLife software:
-
-1. Navigate to: **File → Batch Processing → Sleep Export**
-2. Select participants
-3. Export to CSV format
-4. Save as: `BatchSleepExportDetails.csv`
-
-### Step 3: Data Processing in R
-```{r complete-workflow, eval=FALSE}
-library(sleepwaker)
-library(readr)
-library(dplyr)
-
-# Import batch sleep export
-raw_data <- read_csv("BatchSleepExportDetails.csv")
-
-# Examine data structure
-glimpse(raw_data)
-
-# Generate wake periods
-wake_data <- sleepwaker(
-  data = raw_data,
-  input.type = "raw",
-  output.type = "wake",
-  output.file = "wake_periods_for_analysis.csv"
-)
-
-# Verify output
-cat("Processed", length(unique(wake_data$`Subject Name`)), "participants\n")
-cat("Generated", nrow(wake_data), "wake periods\n")
-
-# Preview results
-head(wake_data)
-```
-
-### Step 4: Integration with Activity Analysis
-
-Import `wake_periods_for_analysis.csv` into your activity analysis workflow to constrain sedentary behavior and MVPA calculations to waking hours only.
-
-## Validation and Quality Assurance
-
-### Input Validation
-
-The package implements comprehensive validation checks:
-
-- Data frame structure verification
-- Required column presence confirmation
-- Datetime format parsing with explicit error messaging
-- Subject-level data sufficiency assessment (minimum 2 periods required)
-
-### Edge Case Handling
-
-- **Single Period Subjects**: Warning issued, subject skipped
-- **Irregular Sleep Patterns**: Chronological sorting ensures correct pairing
-- **Missing Data**: Explicit error messages with troubleshooting guidance
-- **Format Inconsistencies**: Validation with clear error reporting
-
-## Performance Characteristics
-
-- **Processing Speed**: Scales linearly with dataset size
-- **Memory Efficiency**: Processes data frame subsets by subject
-- **Typical Performance**: ~1000 participants processed in <5 seconds on standard hardware
+- [Getting Started Guide](https://rdazadda.github.io/sleepwaker/articles/getting-started.html)
+- [Function Reference](https://rdazadda.github.io/sleepwaker/reference/index.html)
 
 ## Citation
-
-If you use **sleepwaker** in your research, please cite:
 ```
-Azadda, R.D. (2025). sleepwaker: Invert Sleep and Wake Periods from 
-  Accelerometry Data. R package version 0.1.0. 
+Azadda, R.D. (2025). sleepwaker: Invert Sleep and Wake Periods 
+  from Accelerometry Data. R package version 0.1.0.
   https://github.com/rdazadda/sleepwaker
 ```
 
-### Related Publications
+## Contact
 
-This package supports the methodology described in:
-
-[Your manuscript citation will go here upon publication]
-
-## References
-
-Cole, R. J., Kripke, D. F., Gruen, W., Mullaney, D. J., & Gillin, J. C. (1992). Automatic sleep/wake identification from wrist activity. *Sleep*, 15(5), 461-469. https://doi.org/10.1093/sleep/15.5.461
-
-Sadeh, A., Sharkey, K. M., & Carskadon, M. A. (1994). Activity-based sleep-wake identification: An empirical test of methodological issues. *Sleep*, 17(3), 201-207. https://doi.org/10.1093/sleep/17.3.201
-
-## Getting Help
-
-### Documentation
-
-- **Function Reference**: Browse detailed function documentation at [https://rdazadda.github.io/sleepwaker/reference/](https://rdazadda.github.io/sleepwaker/reference/)
-- **Package Help**: Access within R using `help(package = "sleepwaker")`
-- **Function Help**: View specific function documentation with `?sleepwaker`
-
-### Support
-
-- **Bug Reports**: Submit issues at [https://github.com/rdazadda/sleepwaker/issues](https://github.com/rdazadda/sleepwaker/issues)
-- **Feature Requests**: Open a discussion at [https://github.com/rdazadda/sleepwaker/discussions](https://github.com/rdazadda/sleepwaker/discussions)
-- **Questions**: Contact the maintainer or post in discussions
-
-## Acknowledgments
-
-Development of this package was supported by research conducted at the University of Alaska.
+- **Report issues**: [GitHub Issues](https://github.com/rdazadda/sleepwaker/issues)
+- **Email**: rdazadda@alaska.edu
 
 ---
 
-**Developed by:** Raymond Dacosta Azadda  
-**Maintainer:** Raymond Dacosta Azadda (rdazadda@alaska.edu)  
-**Repository:** https://github.com/rdazadda/sleepwaker
+## Acknowledgments
+
+This package was developed at the **Center for Alaska Native Health Research (CANHR)**, University of Alaska Fairbanks.
+
+**Principal Advisor:**  Andrew (Andy) Grogan-Kaylor
+
+**Developer:** Raymond Dacosta Azadda
+
+This work was supported by research conducted at CANHR. I acknowledge the Numbers Team in particluar Prof. Andrew (Andy) Grogan-Kaylor and KyungSook Lee, PhD  for their guidance, mentorship, and contributions to the development of this package.
+
+## Contact
+
+- **Developer**: Raymond Dacosta Azadda (rdazadda@alaska.edu)
+- **Report Issues**: [GitHub Issues](https://github.com/rdazadda/sleepwaker/issues)
+
+---
+
+**Affiliation:** Center for Alaska Native Health Research (CANHR)  
+**Institution:** University of Alaska Fairbanks

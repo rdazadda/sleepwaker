@@ -7,216 +7,67 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 # Introduction
 
-This vignette demonstrates how to use **sleepwaker** to invert sleep periods to wake periods from accelerometry data, addressing a fundamental methodological challenge in physical activity research.
+**sleepwaker** inverts sleep periods to wake periods from accelerometry data particularly Actigraph Data.
 
-## The Methodological Problem
+## The Problem
 
-When analyzing 24-hour accelerometry data, researchers often inadvertently include sleep periods in their behavioral assessments. Sleep, typically spanning 6-9 hours per day, is algorithmically classified as sedentary behavior by activity analysis software. This creates several analytical problems:
+24-hour accelerometry analysis includes sleep, which inflates sedentary time estimates, how then can we exclude sleep completely and focus on wake periods?
 
-1. **Artificial Inflation**: Sedentary time estimates are inflated by 50-90% of the 24-hour period
-2. **Conceptual Conflation**: Sleep is fundamentally different from waking sedentary behavior
-3. **Spurious Associations**: Correlations between "sedentary time" and health outcomes may actually reflect sleep patterns
-4. **Invalid Comparisons**: Between-group differences may be driven by sleep rather than waking behavior
+## The Solution
 
-## The Solution: Temporal Inversion
-
-**sleepwaker** implements an automated algorithm that inverts sleep periods to generate wake periods, enabling researchers to constrain analysis to waking hours only.
+Convert sleep periods to wake periods to analyze waking behavior only.
 
 # Installation
-
-Install the development version from GitHub:
-```{r installation, eval=FALSE}
-# Install devtools if needed
-if (!requireNamespace("devtools", quietly = TRUE)) {
-    install.packages("devtools")
-}
-
-# Install sleepwaker
+```{r install, eval=FALSE}
 devtools::install_github("rdazadda/sleepwaker")
 ```
-
-Load the package:
-```{r load-package}
+```{r load}
 library(sleepwaker)
 ```
-
-# Data Requirements
-
-## Input Data Format
-
-**sleepwaker** processes batch sleep export data from ActiGraph ActiLife software. The required input format includes three essential columns:
-
-| Column Name | Description | Format |
-|-------------|-------------|--------|
-| `Subject Name` | Participant identifier | Character string |
-| `In Bed Time` | Sleep onset timestamp | MM/DD/YYYY HH:MM:SS AM/PM |
-| `Out Bed Time` | Sleep offset timestamp | MM/DD/YYYY HH:MM:SS AM/PM |
-
-## Creating Example Data
-
-For demonstration purposes, we create sample batch export data:
-```{r example-data}
-batch_data <- data.frame(
-  "Subject Name" = c("P001", "P001", "P001", "P002", "P002"),
-  "In Bed Time" = c("10/12/2024 11:00:00 PM", "10/13/2024 10:45:00 PM",
-                    "10/14/2024 11:15:00 PM", "10/12/2024 10:30:00 PM",
-                    "10/13/2024 11:00:00 PM"),
-  "Out Bed Time" = c("10/13/2024 07:00:00 AM", "10/14/2024 06:45:00 AM",
-                     "10/15/2024 07:30:00 AM", "10/13/2024 06:30:00 AM",
-                     "10/14/2024 07:15:00 AM"),
-  check.names = FALSE
-)
-
-# Display the data
-batch_data
-```
-
-This represents sleep periods detected by Cole-Kripke or Sadeh algorithms for two participants across multiple days.
 
 # Basic Usage
 
-## Scenario 1: Raw Data to Sleep Periods
-
-Convert batch export data to formatted sleep periods:
-```{r scenario-1}
-sleep_periods <- sleepwaker(
-  data = batch_data,
-  input.type = "raw",
-  output.type = "sleep"
+## Example Data
+```{r data}
+batch_data <- data.frame(
+  "Subject Name" = c("P001", "P001", "P002"),
+  "In Bed Time" = c("10/12/2024 11:00:00 PM", "10/13/2024 10:45:00 PM",
+                    "10/12/2024 10:30:00 PM"),
+  "Out Bed Time" = c("10/13/2024 07:00:00 AM", "10/14/2024 06:45:00 AM",
+                     "10/13/2024 06:30:00 AM"),
+  check.names = FALSE
 )
-
-# Display results
-sleep_periods
 ```
 
-**Output Structure:**
-- Timestamps split into separate date and time columns
-- Standardized format compatible with analysis software
-- Category field available for user annotations
-
-## Scenario 2: Raw Data to Wake Periods
-
-Direct conversion from batch export to wake periods (most common use case):
-```{r scenario-2}
-wake_periods <- sleepwaker(
-  data = batch_data,
-  input.type = "raw",
-  output.type = "wake"
-)
-
-# Display results
+## Convert to Wake Periods
+```{r convert}
+wake_periods <- sleepwaker(batch_data, 
+                           input.type = "raw", 
+                           output.type = "wake")
 wake_periods
 ```
 
-**Key Observation:** 
-- Input: 5 sleep periods (3 for P001, 2 for P002)
-- Output: 3 wake periods (2 for P001, 1 for P002)
-- Each participant has *n-1* wake periods from *n* sleep periods
-
-## Scenario 3: Sleep to Wake Conversion
-
-If you already have formatted sleep periods, convert directly:
-```{r scenario-3}
-wake_from_sleep <- sleepwaker(
-  data = sleep_periods,
-  input.type = "sleep",
-  output.type = "wake"
-)
-
-# Verify equivalence with Scenario 2
-identical(wake_periods, wake_from_sleep)
+## Save to File
+```{r save, eval=FALSE}
+wake_periods <- sleepwaker(batch_data, 
+                           input.type = "raw", 
+                           output.type = "wake",
+                           output.file = "wake_periods.csv")
 ```
 
-# Understanding the Inversion Algorithm
+# Workflow
 
-## Temporal Pairing Logic
-
-The algorithm operates through consecutive period pairing for each subject:
-
-**For sleep periods i and i+1:**
-```
-Sleep Period i:   [Start_i] ---------- [End_i]
-                                        ↓
-Wake Period:                    [End_i] ========== [Start_i+1]
-                                                   ↓
-Sleep Period i+1:                          [Start_i+1] ---------- [End_i+1]
-```
-
-**Mathematical Definition:**
-- Wake period start = Sleep period *i* offset time
-- Wake period end = Sleep period *i+1* onset time
-
-## Why N-1 Periods?
-
-The final sleep period for each subject cannot be inverted because there is no subsequent sleep period to define the wake period endpoint.
-
-# Complete Research Workflow
-
-## Step 1: ActiGraph Data Collection
-
-1. Deploy GT3X+ or GT9X accelerometers
-2. Configure for 24-hour wear protocol
-3. Collect data for target monitoring period
-4. Download data using ActiLife software
-
-## Step 2: Sleep Detection
-
-In ActiLife:
-
-1. **Wear Time Validation**: Apply appropriate wear time algorithm
-2. **Sleep Scoring**: 
-   - Adults: Apply Cole-Kripke algorithm
-   - Youth/Children: Apply Sadeh algorithm
-3. **Quality Review**: Manually review flagged periods if needed
-
-## Step 3: Batch Export
-
-1. Navigate to **File → Batch Processing → Sleep Export**
-2. Select all participants
-3. Export format: CSV
-4. Save as: `BatchSleepExportDetails.csv`
-
-## Step 4: R Processing
-```{r workflow, eval=FALSE}
-library(sleepwaker)
-library(readr)
-
-# Import batch export
-sleep_data <- read_csv("BatchSleepExportDetails.csv")
-
-# Generate wake periods
-wake_data <- sleepwaker(
-  data = sleep_data,
-  input.type = "raw",
-  output.type = "wake",
-  output.file = "wake_periods_final.csv"
-)
-
-# View summary
-cat("Processed", length(unique(wake_data$`Subject Name`)), "participants\n")
-```
+1. Export sleep data from ActiGraph ActiLife
+2. Load in R: `data <- read_csv("BatchSleepExport.csv")`
+3. Convert: `wake_periods <- sleepwaker(data, input.type = "raw", output.type = "wake")`
+4. Use wake periods in your analysis
 
 # Getting Help
 
-- **Package Overview**: `help(package = "sleepwaker")`
-- **Function Help**: `?sleepwaker`
-- **Bug Reports**: [GitHub Issues](https://github.com/rdazadda/sleepwaker/issues)
-
-# References
-
-Cole, R. J., Kripke, D. F., Gruen, W., Mullaney, D. J., & Gillin, J. C. (1992). Automatic sleep/wake identification from wrist activity. *Sleep*, 15(5), 461-469.
-
-Sadeh, A., Sharkey, K. M., & Carskadon, M. A. (1994). Activity-based sleep-wake identification: An empirical test of methodological issues. *Sleep*, 17(3), 201-207.
-
-# Session Information
-```{r session-info}
-sessionInfo()
-```
+- Function help: `?sleepwaker`
+- Report issues: [GitHub](https://github.com/rdazadda/sleepwaker/issues)

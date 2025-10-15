@@ -15,4 +15,8 @@ Useful links:
 }
 
 }
+\author{
+\strong{Maintainer}: Raymond Dacosta Azadda \email{rdazadda@alaska.edu}
+
+}
 \keyword{internal}

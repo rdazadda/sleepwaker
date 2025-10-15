@@ -22,5 +22,6 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown
-URL: https://github.com/rdazadda/sleepwaker
+URL: https://github.com/rdazadda/sleepwaker, https://rdazadda.github.io/sleepwaker/
 BugReports: https://github.com/rdazadda/sleepwaker/issues
+VignetteBuilder: knitr

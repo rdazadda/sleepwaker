@@ -11,6 +11,7 @@ Processes batch sleep export data from accelerometry devices and inverts sleep p
 Useful links:
 \itemize{
   \item \url{https://github.com/rdazadda/sleepwaker}
+  \item \url{https://rdazadda.github.io/sleepwaker/}
   \item Report bugs at \url{https://github.com/rdazadda/sleepwaker/issues}
 }
 

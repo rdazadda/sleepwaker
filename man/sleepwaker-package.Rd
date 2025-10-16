@@ -19,5 +19,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Raymond Dacosta Azadda \email{rdazadda@alaska.edu}
 
+Authors:
+\itemize{
+  \item Andrew Grogan-Kaylor \email{agrogan@umich.edu}
+  \item KyungSook Lee \email{klee98@alaska.edu}
+}
+
 }
 \keyword{internal}

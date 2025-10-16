@@ -1,3 +1,4 @@
+
 ^sleepwaker\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
@@ -6,3 +7,4 @@
 ^pkgdown$
 ^\.github$
 ^LICENSE\.md$
+\.csv$

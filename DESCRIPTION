@@ -31,3 +31,4 @@ Suggests:
 URL: https://github.com/rdazadda/sleepwaker, https://rdazadda.github.io/sleepwaker/
 BugReports: https://github.com/rdazadda/sleepwaker/issues
 VignetteBuilder: knitr
+LazyData: true

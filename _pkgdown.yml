@@ -35,6 +35,11 @@ reference:
   contents:
   - sleepwaker
 
+- title: Sample Data
+  desc: Example dataset for demonstrations
+  contents:
+  - sample.data
+
 - title: Helper Functions
   desc: Internal functions for data processing
   contents:

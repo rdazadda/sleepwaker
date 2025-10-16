@@ -128,7 +128,6 @@ Native Health Research (CANHR), University of Alaska Fairbanks.
 
 ## Contact
 
-- **Developer**: Raymond Dacosta Azadda  
 - **Email**: <rdazadda@alaska.edu>
 - **Report Issues**: [GitHub
   Issues](https://github.com/rdazadda/sleepwaker/issues)

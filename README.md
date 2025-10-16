@@ -6,10 +6,10 @@ research
 
 ## Overview
 
-Sleepwaker package processes batch sleep export data from ActiGraph
-ActiLife software and converts it into formats suitable for both sleep
-analysis and physical activity research. The package addresses two
-critical needs:
+**`Sleepwaker`** package processes batch sleep export data from
+ActiGraph ActiLife software and converts it into formats suitable for
+both sleep analysis and physical activity research. The package
+addresses two critical needs:
 
 1.  For Sleep Researchers: Automatically formats batch sleep exports
     into subject log diary format for sleep pattern analysis.
@@ -40,7 +40,7 @@ associations.
 
 ## The Solution
 
-Sleepwaker provides two automated workflows:
+**`Sleepwaker`** provides two automated workflows:
 
 ### Workflow 1: Sleep Period Analysis
 
@@ -68,7 +68,7 @@ behavior only
 
 ## How It Works
 
-Sleepwaker implements a three-step automated process:
+**`Sleepwaker`** implements a three-step automated process:
 
 1.  Extract: Reads batch sleep export data from ActiGraph ActiLife
     (Cole-Kripke or Sadeh algorithm output).
@@ -115,9 +115,11 @@ in our ongoing research at the Center for Alaska Native Health Research.
 
 ## Citation
 
-If you use Sleepwaker in your research, please cite:
+If you use **`sleepwaker`** in your research, please cite:
 
-    This will be provided later
+    Azadda, R.D. (2025). sleepwaker: Invert Sleep and Wake Periods from 
+      Accelerometry Data. R package version 0.1.0.
+      https://github.com/rdazadda/sleepwaker
 
 ## Acknowledgments
 

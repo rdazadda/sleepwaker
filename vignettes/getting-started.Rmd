@@ -12,7 +12,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 # Introduction
 
-This guide demonstrates how to use sleepwaker to process ActiGraph batch sleep export data for behavioral research. The package provides automated workflows for both sleep analysis and physical activity research.
+This guide demonstrates how to use **`sleepwaker`** to process ActiGraph batch sleep export data for behavioral research. The package provides automated workflows for both sleep analysis and physical activity research.
 
 **What you'll learn:**
 
@@ -38,7 +38,7 @@ library(sleepwaker)
 
 ## Input Requirements
 
-Sleepwaker requires batch sleep export data from ActiGraph ActiLife with three columns:
+**`Sleepwaker`** requires batch sleep export data from ActiGraph ActiLife with three columns:
 
 - **Subject Name**: Unique identifier for each participant
 - **In Bed Time**: Datetime when participant went to bed (mm/dd/yyyy hh:mm:ss AM/PM)
@@ -222,9 +222,11 @@ Action: Review why the subject has limited data (short monitoring period, device
 
 ## Citation
 
-If you use sleepwaker in your research, please cite:
+If you use **`sleepwaker`** in your research, please cite:
 ```
-This will be provided later
+Azadda, R.D. (2025). sleepwaker: Invert Sleep and Wake Periods from 
+  Accelerometry Data. R package version 0.1.0.
+  https://github.com/rdazadda/sleepwaker
 ```
 
 **Good luck with your research!**

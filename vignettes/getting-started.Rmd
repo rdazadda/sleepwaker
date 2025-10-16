@@ -12,62 +12,219 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 # Introduction
 
-**sleepwaker** inverts sleep periods to wake periods from accelerometry data particularly Actigraph Data.
+This guide demonstrates how to use sleepwaker to process ActiGraph batch sleep export data for behavioral research. The package provides automated workflows for both sleep analysis and physical activity research.
 
-## The Problem
+**What you'll learn:**
 
-24-hour accelerometry analysis includes sleep, which inflates sedentary time estimates, how then can we exclude sleep completely and focus on wake periods?
-
-## The Solution
-
-Convert sleep periods to wake periods to analyze waking behavior only.
+- How to install and load the package
+- Three common usage scenarios
+- Complete workflow from ActiLife export to analysis-ready data
+- When to use each approach
 
 # Installation
+
+Install the development version from GitHub:
 ```{r install, eval=FALSE}
+# Install sleepwaker
 devtools::install_github("rdazadda/sleepwaker")
 ```
+
+Load the package:
 ```{r load}
 library(sleepwaker)
 ```
 
-# Basic Usage
+# Understanding the Data Format
+
+## Input Requirements
+
+Sleepwaker requires batch sleep export data from ActiGraph ActiLife with three columns:
+
+- **Subject Name**: Unique identifier for each participant
+- **In Bed Time**: Datetime when participant went to bed (mm/dd/yyyy hh:mm:ss AM/PM)
+- **Out Bed Time**: Datetime when participant got out of bed (mm/dd/yyyy hh:mm:ss AM/PM)
+
+These columns are automatically included in ActiLife batch sleep exports.
 
 ## Example Data
+
+Let's create sample data representing ActiGraph batch sleep export:
 ```{r data}
-batch_data <- data.frame(
-  "Subject Name" = c("P001", "P001", "P002"),
-  "In Bed Time" = c("10/12/2024 11:00:00 PM", "10/13/2024 10:45:00 PM",
-                    "10/12/2024 10:30:00 PM"),
-  "Out Bed Time" = c("10/13/2024 07:00:00 AM", "10/14/2024 06:45:00 AM",
-                     "10/13/2024 06:30:00 AM"),
+batch.data <- data.frame(
+  "Subject Name" = c("P001", "P001", "P001", "P002", "P002"),
+  "In Bed Time" = c("10/12/2024 11:00:00 PM", 
+                    "10/13/2024 10:45:00 PM",
+                    "10/14/2024 11:15:00 PM", 
+                    "10/12/2024 10:30:00 PM",
+                    "10/13/2024 11:00:00 PM"),
+  "Out Bed Time" = c("10/13/2024 07:00:00 AM", 
+                     "10/14/2024 06:45:00 AM",
+                     "10/15/2024 07:30:00 AM", 
+                     "10/13/2024 06:30:00 AM",
+                     "10/14/2024 07:15:00 AM"),
   check.names = FALSE
 )
+
+# View the data
+batch.data
 ```
 
-## Convert to Wake Periods
-```{r convert}
-wake_periods <- sleepwaker(batch_data, 
+This represents sleep periods detected by Cole-Kripke or Sadeh algorithms for 2 participants across multiple days.
+
+# Three Usage Scenarios
+
+## Scenario 1: Format Sleep Periods for Sleep Analysis
+
+Use case: You're conducting sleep research and need formatted sleep periods.
+```{r scenario1}
+sleep.periods <- sleepwaker(batch.data, 
+                            input.type = "raw", 
+                            output.type = "sleep")
+
+# View results
+sleep.periods
+```
+
+**What happened:**
+
+- Batch export was reformatted into subject log diary format
+- Timestamps split into separate date and time columns
+- Data ready for sleep pattern analysis
+
+
+## Scenario 2: Convert Sleep to Wake Periods for Activity Analysis
+
+Use case: You're studying physical activity or sedentary behavior and need to exclude sleep.
+```{r scenario2}
+wake.periods <- sleepwaker(batch.data, 
                            input.type = "raw", 
                            output.type = "wake")
-wake_periods
+
+# View results
+wake.periods
 ```
 
-## Save to File
-```{r save, eval=FALSE}
-wake_periods <- sleepwaker(batch_data, 
+**What happened:**
+
+- Sleep periods were inverted to create wake periods
+- Each wake period represents time between consecutive sleep episodes
+- Notice: 5 sleep periods → 3 wake periods (n-1 per subject)
+
+Why n-1 periods?: The final sleep period has no subsequent sleep to pair with, so no wake period can be generated after it.
+
+
+## Scenario 3: Generate Both Sleep and Wake Periods
+
+Use case: You need both sleep periods (for sleep analysis) AND wake periods (for activity analysis).
+```{r scenario3}
+# Step 1: Create formatted sleep periods
+sleep.periods <- sleepwaker(batch.data, 
+                            input.type = "raw", 
+                            output.type = "sleep")
+
+# Step 2: Convert sleep periods to wake periods
+wake.periods <- sleepwaker(sleep.periods, 
+                           input.type = "sleep", 
+                           output.type = "wake")
+
+# Now you have both
+head(sleep.periods)
+head(wake.periods)
+```
+
+**What happened:**
+
+- First step: Formatted sleep periods for sleep analysis
+- Second step: Generated wake periods from those sleep periods
+- You now have both datasets for comprehensive analysis
+
+
+# Saving Results to Files
+
+All scenarios support direct export to CSV:
+```{r save-examples, eval=FALSE}
+# Save sleep periods
+sleep.periods <- sleepwaker(batch.data, 
+                            input.type = "raw", 
+                            output.type = "sleep",
+                            output.file = "sleep.periods.csv")
+
+# Save wake periods  
+wake.periods <- sleepwaker(batch_data, 
                            input.type = "raw", 
                            output.type = "wake",
-                           output.file = "wake_periods.csv")
+                           output.file = "wake.periods.csv")
 ```
 
-# Workflow
+The function displays a confirmation message when files are saved successfully.
 
-1. Export sleep data from ActiGraph ActiLife
-2. Load in R: `data <- read_csv("BatchSleepExport.csv")`
-3. Convert: `wake_periods <- sleepwaker(data, input.type = "raw", output.type = "wake")`
-4. Use wake periods in your analysis
+## Important Notes
+
+**Supported:**
+- Raw → Sleep (formatting)
+
+- Raw → Wake (formatting + inversion) 
+
+- Sleep → Wake (inversion)
+
+**Not supported:**
+- Wake → Sleep (would cause data loss)
+
+
+Why?: Once sleep periods are inverted to wake periods, the final sleep period is lost. Attempting to reconstruct it would require guessing, which would be scientifically invalid.
+
+# Troubleshooting
+
+## Common Issues
+
+### Issue 1: Datetime Parsing Error
+
+**Error message:**
+```
+Error: Could not parse datetime. Check format is MM/DD/YYYY HH:MM:SS AM/PM
+```
+
+**Solution:** Verify your ActiLife export uses 12-hour time format with AM/PM. Re-export if necessary.
+
+### Issue 2: Missing Required Columns
+
+Error message:
+```
+Error: Missing required columns: In Bed Time
+```
+
+Solution:Ensure your CSV contains all three required columns exactly as named in ActiLife batch sleep export.
+
+### Issue 3: Insufficient Data Warning
+
+Warning message:
+```
+Warning: Subject P001 has fewer than 2 periods. Skipping.
+```
+
+Explanation:Inversion requires at least 2 sleep periods per subject. Subjects with only 1 sleep period are skipped.
+
+Action: Review why the subject has limited data (short monitoring period, device removal, or algorithm failure).
 
 # Getting Help
 
-- Function help: `?sleepwaker`
-- Report issues: [GitHub](https://github.com/rdazadda/sleepwaker/issues)
+## Documentation
+
+- **Function help**: Type `?sleepwaker` in R console
+- **Package overview**: Type `help(package = "sleepwaker")`
+- **Online reference**: [https://rdazadda.github.io/sleepwaker/](https://rdazadda.github.io/sleepwaker/)
+
+## Support
+
+- **Report bugs**: [GitHub Issues](https://github.com/rdazadda/sleepwaker/issues)
+- **Ask questions**: [GitHub Discussions](https://github.com/rdazadda/sleepwaker/discussions)
+- **Email**: rdazadda@alaska.edu
+
+## Citation
+
+If you use sleepwaker in your research, please cite:
+```
+This will be provided later
+```
+
+**Good luck with your research!**

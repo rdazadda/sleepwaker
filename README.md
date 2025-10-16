@@ -117,9 +117,9 @@ in our ongoing research at the Center for Alaska Native Health Research.
 
 If you use **`sleepwaker`** in your research, please cite:
 
-    Azadda, R.D. (2025). sleepwaker: Invert Sleep and Wake Periods from 
-      Accelerometry Data. R package version 0.1.0.
-      https://github.com/rdazadda/sleepwaker
+    Azadda, R.D., Grogan-Kaylor, A., & Lee, K. (2025). sleepwaker: 
+      Invert Sleep and Wake Periods from Accelerometry Data. 
+      R package version 0.1.0. https://github.com/rdazadda/sleepwaker
 
 ## Acknowledgments
 

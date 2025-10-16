@@ -43,7 +43,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/rdazadda/sleepwaker" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/rdazadda/sleepwaker"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -54,93 +54,128 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="sleepwaker">sleepwaker<a class="anchor" aria-label="anchor" href="#sleepwaker"></a>
 </h1></div>
-<p>Invert sleep periods to wake periods from accelerometry data in particular Actigraph Data.</p>
+<p>Automated processing of ActiGraph sleep data for behavioral/Physical research</p>
 <div class="section level2">
-<h2 id="why">Why?<a class="anchor" aria-label="anchor" href="#why"></a>
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>When analyzing 24-hour accelerometry data, sleep periods inflate sedentary time estimates and using others measures by Actilife software did not prove real good. <strong>sleepwaker</strong> solves this by converting sleep periods to wake periods, enabling analysis of waking behavior only by using this in the subject log diary to restrict the analysis on wake periods.</p>
+<p>Sleepwaker package processes batch sleep export data from ActiGraph ActiLife software and converts it into formats suitable for both sleep analysis and physical activity research. The package addresses two critical needs:</p>
+<ol style="list-style-type: decimal">
+<li>For Sleep Researchers: Automatically formats batch sleep exports into subject log diary format for sleep pattern analysis.</li>
+<li>For Activity Researchers: Inverts sleep periods to wake periods, enabling sedentary behavior and physical activity analysis constrained to waking hours only.</li>
+</ol>
 </div>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="the-problem-we-solved">The Problem We Solved<a class="anchor" aria-label="anchor" href="#the-problem-we-solved"></a>
 </h2>
+<div class="section level3">
+<h3 id="issue-1-manual-data-formatting">Issue 1: Manual Data Formatting<a class="anchor" aria-label="anchor" href="#issue-1-manual-data-formatting"></a>
+</h3>
+<p>ActiGraph ActiLife software exports sleep data detected by validated algorithms (Cole-Kripke for adults, Sadeh for youth), but this batch export format requires manual reformatting into subject log diary format for most analyses. This manual process is time-consuming for large datasets, error-prone, and not reproducible.</p>
+</div>
+<div class="section level3">
+<h3 id="issue-2-inflated-sedentary-time-estimates">Issue 2: Inflated Sedentary Time Estimates<a class="anchor" aria-label="anchor" href="#issue-2-inflated-sedentary-time-estimates"></a>
+</h3>
+<p>When analyzing 24-hour accelerometry (Actigraph) data without excluding sleep, sleep periods are misclassified as sedentary behavior, which inflates sedentary time estimates. Standard ActiLife processing methods cannot adequately handle populations with irregular sleep patterns, making it hard for researchers to distinguish between sleep and true waking sedentary behavior. This fundamental measurement problem leads to invalid conclusions about sedentary patterns and their health associations.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="the-solution">The Solution<a class="anchor" aria-label="anchor" href="#the-solution"></a>
+</h2>
+<p>Sleepwaker provides two automated workflows:</p>
+<div class="section level3">
+<h3 id="workflow-1-sleep-period-analysis">Workflow 1: Sleep Period Analysis<a class="anchor" aria-label="anchor" href="#workflow-1-sleep-period-analysis"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rdazadda/sleepwaker"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Direct formatting for sleep research</span></span>
+<span><span class="va">sleep.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">data</span>, </span>
+<span>                            input.type <span class="op">=</span> <span class="st">"raw"</span>, </span>
+<span>                            output.type <span class="op">=</span> <span class="st">"sleep"</span><span class="op">)</span></span></code></pre></div>
+<p>Converts batch sleep export → subject log diary format for sleep pattern analysis</p>
 </div>
-<div class="section level2">
-<h2 id="quick-example">Quick Example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
-</h2>
+<div class="section level3">
+<h3 id="workflow-2-wake-period-analysis">Workflow 2: Wake Period Analysis<a class="anchor" aria-label="anchor" href="#workflow-2-wake-period-analysis"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rdazadda/sleepwaker" class="external-link">sleepwaker</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Load ActiGraph batch sleep export</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span><span class="st">"BatchSleepExportDetails.csv"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Convert sleep to wake periods</span></span>
-<span><span class="va">wake_periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">data</span>, </span>
+<code class="sourceCode R"><span><span class="co"># Inversion for activity research</span></span>
+<span><span class="va">wake.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">data</span>, </span>
 <span>                           input.type <span class="op">=</span> <span class="st">"raw"</span>, </span>
 <span>                           output.type <span class="op">=</span> <span class="st">"wake"</span><span class="op">)</span></span></code></pre></div>
+<p>Inverts sleep periods → wake periods, enabling analysis of waking behavior only</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+<h2 id="how-it-works">How It Works<a class="anchor" aria-label="anchor" href="#how-it-works"></a>
 </h2>
+<p>Sleepwaker implements a three-step automated process:</p>
+<ol style="list-style-type: decimal">
+<li>Extract: Reads batch sleep export data from ActiGraph ActiLife (Cole-Kripke or Sadeh algorithm output).</li>
+<li>Format: Converts to subject log diary format with separate date and time columns.</li>
+<li>Invert: Applies temporal inversion algorithm to generate wake periods from consecutive sleep episodes</li>
+</ol>
+<p><strong>Key Innovation</strong>: The inversion algorithm pairs consecutive sleep periods chronologically, using the end time of sleep period <em>N</em> as the start of the wake period, and the start time of sleep period <em>N+1</em> as the end. This creates complement periods representing true waking hours.</p>
+</div>
+<div class="section level2">
+<h2 id="why-this-matters">Why This Matters<a class="anchor" aria-label="anchor" href="#why-this-matters"></a>
+</h2>
+<div class="section level3">
+<h3 id="for-sleep-research">For Sleep Research<a class="anchor" aria-label="anchor" href="#for-sleep-research"></a>
+</h3>
 <ul>
-<li>
-<strong>One-step processing</strong> from batch export to wake periods</li>
-<li>
-<strong>Works with</strong> Cole-Kripke and Sadeh algorithms</li>
-<li>
-<strong>Handles multiple subjects</strong> automatically</li>
-<li>
-<strong>Export directly</strong> to CSV for analysis</li>
+<li>Automates tedious data formatting, saving hours of manual work</li>
+<li>Ensures consistency and reproducibility across large studies</li>
+<li>Provides clean sleep period data ready for immediate analysis</li>
+<li>Maintains full compatibility with ActiLife sleep detection algorithms</li>
 </ul>
+</div>
+<div class="section level3">
+<h3 id="for-physical-activity-research">For Physical Activity Research<a class="anchor" aria-label="anchor" href="#for-physical-activity-research"></a>
+</h3>
+<ul>
+<li>Prevents sedentary time inflation by removing sleep from estimates</li>
+<li>Enables valid comparisons where sedentary behavior reflects only waking patterns</li>
+<li>Improves measurement validity by distinguishing true sedentary behavior from sleep</li>
+<li>Fills a critical methodological gap with no existing solutions</li>
+</ul>
+<p>This methodology addresses a fundamental limitation in accelerometry-based sedentary behavior assessment and has been validated in our ongoing research at the Center for Alaska Native Health Research.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="learn-more">Learn More<a class="anchor" aria-label="anchor" href="#learn-more"></a>
 </h2>
 <ul>
-<li><a href="https://rdazadda.github.io/sleepwaker/articles/getting-started.html">Getting Started Guide</a></li>
-<li><a href="https://rdazadda.github.io/sleepwaker/reference/index.html">Function Reference</a></li>
+<li>
+<a href="https://rdazadda.github.io/sleepwaker/articles/getting-started.html">Getting Started Guide</a> - Installation, examples, and complete workflows</li>
+<li>
+<a href="https://rdazadda.github.io/sleepwaker/reference/index.html">Function Reference</a> - Detailed documentation for all functions</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>Azadda, <span class="fu">R.D.</span> (<span class="dv">2025</span>). sleepwaker<span class="sc">:</span> Invert Sleep and Wake Periods </span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  from Accelerometry Data. R package version <span class="dv">0</span>.<span class="dv">1</span>.<span class="fl">0.</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>rdazadda<span class="sc">/</span>sleepwaker</span></code></pre></div>
+<p>If you use Sleepwaker in your research, please cite:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>This will be provided later</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
+</h2>
+<p>This package was developed by the Numbers Team at the Center for Alaska Native Health Research (CANHR), University of Alaska Fairbanks.</p>
 </div>
 <div class="section level2">
 <h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
 </h2>
 <ul>
 <li>
-<strong>Report issues</strong>: <a href="https://github.com/rdazadda/sleepwaker/issues" class="external-link">GitHub Issues</a>
+<strong>Developer</strong>: Raymond Dacosta Azadda<br>
 </li>
 <li>
 <strong>Email</strong>: <a href="mailto:rdazadda@alaska.edu" class="email">rdazadda@alaska.edu</a>
 </li>
-</ul>
-<hr>
-</div>
-<div class="section level2">
-<h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
-</h2>
-<p>This package was developed at the <strong>Center for Alaska Native Health Research (CANHR)</strong>, University of Alaska Fairbanks.</p>
-<p><strong>Principal Advisor:</strong> Andrew (Andy) Grogan-Kaylor</p>
-<p><strong>Developer:</strong> Raymond Dacosta Azadda</p>
-<p>This work was supported by research conducted at CANHR. I acknowledge the Numbers Team in particluar Prof. Andrew (Andy) Grogan-Kaylor and KyungSook Lee, PhD for their guidance, mentorship, and contributions to the development of this package.</p>
-<p>##Contact</p>
-<ul>
-<li>
-<strong>Developer</strong>: Raymond Dacosta Azadda (<a href="mailto:rdazadda@alaska.edu" class="email">rdazadda@alaska.edu</a>)</li>
 <li>
 <strong>Report Issues</strong>: <a href="https://github.com/rdazadda/sleepwaker/issues" class="external-link">GitHub Issues</a>
 </li>
 </ul>
 <hr>
-<p><strong>Affiliation:</strong> Center for Alaska Native Health Research (CANHR)<br><strong>Institution:</strong> University of Alaska Fairbanks</p>
+<p><strong>Affiliation</strong>: Center for Alaska Native Health Research (CANHR)<br><strong>Institution</strong>: University of Alaska Fairbanks</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

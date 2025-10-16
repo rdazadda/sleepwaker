@@ -114,36 +114,20 @@ bed (mm/dd/yyyy hh:mm:ss AM/PM)</li>
 exports.</p>
 </div>
 <div class="section level3">
-<h3 id="example-data">Example Data<a class="anchor" aria-label="anchor" href="#example-data"></a>
+<h3 id="sample-data">Sample Data<a class="anchor" aria-label="anchor" href="#sample-data"></a>
 </h3>
-<p>Let’s create sample data representing ActiGraph batch sleep
-export:</p>
+<p>Let’s load the real ActiGraph sample data included with the
+package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">batch.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  <span class="st">"Subject Name"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P001"</span>, <span class="st">"P001"</span>, <span class="st">"P001"</span>, <span class="st">"P002"</span>, <span class="st">"P002"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"In Bed Time"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10/12/2024 11:00:00 PM"</span>, </span>
-<span>                    <span class="st">"10/13/2024 10:45:00 PM"</span>,</span>
-<span>                    <span class="st">"10/14/2024 11:15:00 PM"</span>, </span>
-<span>                    <span class="st">"10/12/2024 10:30:00 PM"</span>,</span>
-<span>                    <span class="st">"10/13/2024 11:00:00 PM"</span><span class="op">)</span>,</span>
-<span>  <span class="st">"Out Bed Time"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10/13/2024 07:00:00 AM"</span>, </span>
-<span>                     <span class="st">"10/14/2024 06:45:00 AM"</span>,</span>
-<span>                     <span class="st">"10/15/2024 07:30:00 AM"</span>, </span>
-<span>                     <span class="st">"10/13/2024 06:30:00 AM"</span>,</span>
-<span>                     <span class="st">"10/14/2024 07:15:00 AM"</span><span class="op">)</span>,</span>
-<span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># View the data</span></span>
-<span><span class="va">batch.data</span></span>
-<span><span class="co">#&gt;   Subject Name            In Bed Time           Out Bed Time</span></span>
-<span><span class="co">#&gt; 1         P001 10/12/2024 11:00:00 PM 10/13/2024 07:00:00 AM</span></span>
-<span><span class="co">#&gt; 2         P001 10/13/2024 10:45:00 PM 10/14/2024 06:45:00 AM</span></span>
-<span><span class="co">#&gt; 3         P001 10/14/2024 11:15:00 PM 10/15/2024 07:30:00 AM</span></span>
-<span><span class="co">#&gt; 4         P002 10/12/2024 10:30:00 PM 10/13/2024 06:30:00 AM</span></span>
-<span><span class="co">#&gt; 5         P002 10/13/2024 11:00:00 PM 10/14/2024 07:15:00 AM</span></span></code></pre></div>
-<p>This represents sleep periods detected by Cole-Kripke or Sadeh
-algorithms for 2 participants across multiple days.</p>
+<code class="sourceCode R"><span><span class="co"># Load real sample data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sample.data</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Dataset summary</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Dataset contains"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.data</span><span class="op">)</span>, <span class="st">"sleep periods for"</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">sample.data</span><span class="op">$</span><span class="va">`Subject Name`</span><span class="op">)</span><span class="op">)</span>, <span class="st">"participants"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Dataset contains 15 sleep periods for 2 participants</span></span></code></pre></div>
+<p>This is actual ActiGraph ActiLife batch sleep export data containing
+sleep periods detected by Cole-Kripke or Sadeh algorithms.</p>
 </div>
 </div>
 <div class="section level2">
@@ -154,19 +138,19 @@ algorithms for 2 participants across multiple days.</p>
 </h3>
 <p>Use case: You’re conducting sleep research and need formatted sleep
 periods.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sleep.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">batch.data</span>, </span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sleep.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">sample.data</span>, </span>
 <span>                            input.type <span class="op">=</span> <span class="st">"raw"</span>, </span>
 <span>                            output.type <span class="op">=</span> <span class="st">"sleep"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># View results</span></span>
-<span><span class="va">sleep.periods</span></span>
+<span><span class="co"># Display first few formatted sleep periods</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sleep.periods</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Subject Name    On Date     On Time   Off Date    Off Time Category</span></span>
-<span><span class="co">#&gt; 1         P001 10/12/2024 11:00:00 PM 10/13/2024 07:00:00 AM         </span></span>
-<span><span class="co">#&gt; 2         P001 10/13/2024 10:45:00 PM 10/14/2024 06:45:00 AM         </span></span>
-<span><span class="co">#&gt; 3         P001 10/14/2024 11:15:00 PM 10/15/2024 07:30:00 AM         </span></span>
-<span><span class="co">#&gt; 4         P002 10/12/2024 10:30:00 PM 10/13/2024 06:30:00 AM         </span></span>
-<span><span class="co">#&gt; 5         P002 10/13/2024 11:00:00 PM 10/14/2024 07:15:00 AM</span></span></code></pre></div>
+<span><span class="co">#&gt; 1           KL 10/07/2025 10:45:00 PM 10/08/2025 07:09:00 AM         </span></span>
+<span><span class="co">#&gt; 2           KL 10/08/2025 07:55:00 AM 10/08/2025 10:56:00 AM         </span></span>
+<span><span class="co">#&gt; 3           KL 10/08/2025 11:34:00 PM 10/09/2025 07:50:00 AM         </span></span>
+<span><span class="co">#&gt; 4           KL 10/09/2025 11:46:00 PM 10/10/2025 07:02:00 AM         </span></span>
+<span><span class="co">#&gt; 5         A001 10/09/2025 12:46:00 AM 10/09/2025 06:07:00 AM</span></span></code></pre></div>
 <p><strong>What happened:</strong></p>
 <ul>
 <li>Batch export was reformatted into subject log diary format</li>
@@ -179,23 +163,26 @@ periods.</p>
 </h3>
 <p>Use case: You’re studying physical activity or sedentary behavior and
 need to exclude sleep.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">wake.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">batch.data</span>, </span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">wake.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">sample.data</span>, </span>
 <span>                           input.type <span class="op">=</span> <span class="st">"raw"</span>, </span>
 <span>                           output.type <span class="op">=</span> <span class="st">"wake"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># View results</span></span>
-<span><span class="va">wake.periods</span></span>
+<span><span class="co"># Display first few wake periods</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wake.periods</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Subject Name    On Date     On Time   Off Date    Off Time Category</span></span>
-<span><span class="co">#&gt; 1         P001 10/13/2024 07:00:00 AM 10/13/2024 10:45:00 PM         </span></span>
-<span><span class="co">#&gt; 2         P001 10/14/2024 06:45:00 AM 10/14/2024 11:15:00 PM         </span></span>
-<span><span class="co">#&gt; 3         P002 10/13/2024 06:30:00 AM 10/13/2024 11:00:00 PM</span></span></code></pre></div>
+<span><span class="co">#&gt; 1           KL 10/08/2025 07:09:00 AM 10/08/2025 07:55:00 AM         </span></span>
+<span><span class="co">#&gt; 2           KL 10/08/2025 10:56:00 AM 10/08/2025 11:34:00 PM         </span></span>
+<span><span class="co">#&gt; 3           KL 10/09/2025 07:50:00 AM 10/09/2025 11:46:00 PM         </span></span>
+<span><span class="co">#&gt; 4         A001 10/09/2025 06:07:00 AM 10/09/2025 06:24:00 AM         </span></span>
+<span><span class="co">#&gt; 5         A001 10/09/2025 09:07:00 AM 10/09/2025 10:53:00 PM</span></span></code></pre></div>
 <p><strong>What happened:</strong></p>
 <ul>
 <li>Sleep periods were inverted to create wake periods</li>
 <li>Each wake period represents time between consecutive sleep
 episodes</li>
-<li>Notice: 5 sleep periods → 3 wake periods (n-1 per subject)</li>
+<li>Notice: Number of wake periods = number of sleep periods - 1 (n-1
+per subject)</li>
 </ul>
 <p>Why n-1 periods?: The final sleep period has no subsequent sleep to
 pair with, so no wake period can be generated after it.</p>
@@ -203,11 +190,11 @@ pair with, so no wake period can be generated after it.</p>
 <div class="section level3">
 <h3 id="scenario-3-generate-both-sleep-and-wake-periods">Scenario 3: Generate Both Sleep and Wake Periods<a class="anchor" aria-label="anchor" href="#scenario-3-generate-both-sleep-and-wake-periods"></a>
 </h3>
-<p>Use case: You need both sleep periods (for sleep analysis) AND wake
+<p>Use case: You need both sleep periods (for sleep analysis) and wake
 periods (for activity analysis).</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Step 1: Create formatted sleep periods</span></span>
-<span><span class="va">sleep.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">batch.data</span>, </span>
+<span><span class="va">sleep.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">sample.data</span>, </span>
 <span>                            input.type <span class="op">=</span> <span class="st">"raw"</span>, </span>
 <span>                            output.type <span class="op">=</span> <span class="st">"sleep"</span><span class="op">)</span></span>
 <span></span>
@@ -216,19 +203,11 @@ periods (for activity analysis).</p>
 <span>                           input.type <span class="op">=</span> <span class="st">"sleep"</span>, </span>
 <span>                           output.type <span class="op">=</span> <span class="st">"wake"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Now you have both</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sleep.periods</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Subject Name    On Date     On Time   Off Date    Off Time Category</span></span>
-<span><span class="co">#&gt; 1         P001 10/12/2024 11:00:00 PM 10/13/2024 07:00:00 AM         </span></span>
-<span><span class="co">#&gt; 2         P001 10/13/2024 10:45:00 PM 10/14/2024 06:45:00 AM         </span></span>
-<span><span class="co">#&gt; 3         P001 10/14/2024 11:15:00 PM 10/15/2024 07:30:00 AM         </span></span>
-<span><span class="co">#&gt; 4         P002 10/12/2024 10:30:00 PM 10/13/2024 06:30:00 AM         </span></span>
-<span><span class="co">#&gt; 5         P002 10/13/2024 11:00:00 PM 10/14/2024 07:15:00 AM</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wake.periods</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Subject Name    On Date     On Time   Off Date    Off Time Category</span></span>
-<span><span class="co">#&gt; 1         P001 10/13/2024 07:00:00 AM 10/13/2024 10:45:00 PM         </span></span>
-<span><span class="co">#&gt; 2         P001 10/14/2024 06:45:00 AM 10/14/2024 11:15:00 PM         </span></span>
-<span><span class="co">#&gt; 3         P002 10/13/2024 06:30:00 AM 10/13/2024 11:00:00 PM</span></span></code></pre></div>
+<span><span class="co"># Both datasets</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Sleep periods:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sleep.periods</span><span class="op">)</span>, <span class="st">"records\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Sleep periods: 15 records</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Wake periods:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">wake.periods</span><span class="op">)</span>, <span class="st">"records\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Wake periods: 13 records</span></span></code></pre></div>
 <p><strong>What happened:</strong></p>
 <ul>
 <li>First step: Formatted sleep periods for sleep analysis</li>
@@ -241,34 +220,33 @@ periods (for activity analysis).</p>
 <h2 id="saving-results-to-files">Saving Results to Files<a class="anchor" aria-label="anchor" href="#saving-results-to-files"></a>
 </h2>
 <p>All scenarios support direct export to CSV:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Save sleep periods</span></span>
-<span><span class="va">sleep.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">batch.data</span>, </span>
+<span><span class="va">sleep.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">sample.data</span>, </span>
 <span>                            input.type <span class="op">=</span> <span class="st">"raw"</span>, </span>
 <span>                            output.type <span class="op">=</span> <span class="st">"sleep"</span>,</span>
-<span>                            output.file <span class="op">=</span> <span class="st">"sleep.periods.csv"</span><span class="op">)</span></span>
+<span>                            output.file <span class="op">=</span> <span class="st">"sleep_periods.csv"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Save wake periods  </span></span>
-<span><span class="va">wake.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">batch_data</span>, </span>
+<span><span class="va">wake.periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sleepwaker.html">sleepwaker</a></span><span class="op">(</span><span class="va">sample.data</span>, </span>
 <span>                           input.type <span class="op">=</span> <span class="st">"raw"</span>, </span>
 <span>                           output.type <span class="op">=</span> <span class="st">"wake"</span>,</span>
-<span>                           output.file <span class="op">=</span> <span class="st">"wake.periods.csv"</span><span class="op">)</span></span></code></pre></div>
+<span>                           output.file <span class="op">=</span> <span class="st">"wake_periods.csv"</span><span class="op">)</span></span></code></pre></div>
 <p>The function displays a confirmation message when files are saved
-successfully.</p>
-<div class="section level3">
-<h3 id="important-notes">Important Notes<a class="anchor" aria-label="anchor" href="#important-notes"></a>
-</h3>
-<p><strong>Supported:</strong> - Raw → Sleep (formatting)</p>
+successfully. ## Important Notes</p>
+<p><strong>Supported:</strong></p>
 <ul>
-<li><p>Raw → Wake (formatting + inversion)</p></li>
-<li><p>Sleep → Wake (inversion)</p></li>
+<li><p>Raw to Sleep (formatting)</p></li>
+<li><p>Raw to Wake (formatting + inversion)</p></li>
+<li><p>Sleep to Wake (inversion)</p></li>
 </ul>
-<p><strong>Not supported:</strong> - Wake → Sleep (would cause data
-loss)</p>
+<p><strong>Not supported:</strong></p>
+<ul>
+<li>Wake to Sleep (would cause data loss)</li>
+</ul>
 <p>Why?: Once sleep periods are inverted to wake periods, the final
 sleep period is lost. Attempting to reconstruct it would require
 guessing, which would be scientifically invalid.</p>
-</div>
 </div>
 <div class="section level2">
 <h2 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
@@ -281,8 +259,8 @@ guessing, which would be scientifically invalid.</p>
 </h4>
 <p><strong>Error message:</strong></p>
 <pre><code>Error: Could not parse datetime. Check format is MM/DD/YYYY HH:MM:SS AM/PM</code></pre>
-<p><strong>Solution:</strong> Verify your ActiLife export uses 12-hour
-time format with AM/PM. Re-export if necessary.</p>
+<p>Solution: Verify your ActiLife export uses 12-hour time format with
+AM/PM. Re-export if necessary.</p>
 </div>
 <div class="section level4">
 <h4 id="issue-2-missing-required-columns">Issue 2: Missing Required Columns<a class="anchor" aria-label="anchor" href="#issue-2-missing-required-columns"></a>
@@ -296,7 +274,7 @@ as named in ActiLife batch sleep export.</p>
 <h4 id="issue-3-insufficient-data-warning">Issue 3: Insufficient Data Warning<a class="anchor" aria-label="anchor" href="#issue-3-insufficient-data-warning"></a>
 </h4>
 <p>Warning message:</p>
-<pre><code>Warning: Subject P001 has fewer than 2 periods. Skipping.</code></pre>
+<pre><code>Warning: Subject A001 has fewer than 2 periods. Skipping.</code></pre>
 <p>Explanation:Inversion requires at least 2 sleep periods per subject.
 Subjects with only 1 sleep period are skipped.</p>
 <p>Action: Review why the subject has limited data (short monitoring

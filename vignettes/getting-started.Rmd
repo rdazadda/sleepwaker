@@ -61,6 +61,10 @@ data(sample.data)
 # Dataset summary
 cat("Dataset contains", nrow(sample.data), "sleep periods for",
     length(unique(sample.data$`Subject Name`)), "participants")
+
+# Showing all column names from ActiGraph export
+cat("ActiGraph batch export includes these columns:\n")
+cat(paste("-", names(sample.data), collapse = "\n"))
 ```
 
 This is actual ActiGraph ActiLife batch sleep export data containing sleep periods detected by Cole-Kripke or Sadeh algorithms.

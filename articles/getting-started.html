@@ -125,7 +125,34 @@ package:</p>
 <code class="sourceCode R"><span><span class="co"># Dataset summary</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Dataset contains"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.data</span><span class="op">)</span>, <span class="st">"sleep periods for"</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">sample.data</span><span class="op">$</span><span class="va">`Subject Name`</span><span class="op">)</span><span class="op">)</span>, <span class="st">"participants"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Dataset contains 15 sleep periods for 2 participants</span></span></code></pre></div>
+<span><span class="co">#&gt; Dataset contains 15 sleep periods for 2 participants</span></span>
+<span></span>
+<span><span class="co"># Showing all column names from ActiGraph export</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"ActiGraph batch export includes these columns:\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ActiGraph batch export includes these columns:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"-"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sample.data</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; - Subject Name</span></span>
+<span><span class="co">#&gt; - File Name</span></span>
+<span><span class="co">#&gt; - Serial Number</span></span>
+<span><span class="co">#&gt; - Epoch Length</span></span>
+<span><span class="co">#&gt; - Weight</span></span>
+<span><span class="co">#&gt; - Age</span></span>
+<span><span class="co">#&gt; - Gender</span></span>
+<span><span class="co">#&gt; - Sleep/Wake Algorithm</span></span>
+<span><span class="co">#&gt; - Sleep Period Detection Algorithm</span></span>
+<span><span class="co">#&gt; - In Bed Time</span></span>
+<span><span class="co">#&gt; - Out Bed Time</span></span>
+<span><span class="co">#&gt; - Efficiency</span></span>
+<span><span class="co">#&gt; - Onset</span></span>
+<span><span class="co">#&gt; - Latency</span></span>
+<span><span class="co">#&gt; - Total Sleep Time</span></span>
+<span><span class="co">#&gt; - WASO</span></span>
+<span><span class="co">#&gt; - Number of Awakenings</span></span>
+<span><span class="co">#&gt; - Length of Awakenings in Minutes</span></span>
+<span><span class="co">#&gt; - Activity Counts</span></span>
+<span><span class="co">#&gt; - Movement Index</span></span>
+<span><span class="co">#&gt; - Fragmentation Index</span></span>
+<span><span class="co">#&gt; - Sleep Fragmentation Index</span></span></code></pre></div>
 <p>This is actual ActiGraph ActiLife batch sleep export data containing
 sleep periods detected by Cole-Kripke or Sadeh algorithms.</p>
 </div>

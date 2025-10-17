@@ -33,33 +33,30 @@
 #' cannot recover original sleep periods.
 #'
 #' @examples
-#' # Create sample batch export data
-#' batch_data <- data.frame(
-#'   "Subject Name" = c("S001", "S001", "S002"),
-#'   "In Bed Time" = c("09/19/2024 11:00:00 PM", "09/20/2024 10:30:00 PM",
-#'                     "09/19/2024 11:15:00 PM"),
-#'   "Out Bed Time" = c("09/20/2024 07:00:00 AM", "09/21/2024 06:45:00 AM",
-#'                      "09/20/2024 07:30:00 AM"),
-#'   check.names = FALSE
-#' )
+#' # Load real sample data
+#' data(sample.data)
 #'
 #' # Convert raw data to sleep periods
-#' sleep_periods <- sleepwaker(batch_data, input.type = "raw",
+#' sleep_periods <- sleepwaker(sample.data,
+#'                             input.type = "raw",
 #'                             output.type = "sleep")
 #'
 #' # Convert raw data to wake periods
-#' wake_periods <- sleepwaker(batch_data, input.type = "raw",
+#' wake_periods <- sleepwaker(sample.data,
+#'                            input.type = "raw",
 #'                            output.type = "wake")
 #'
 #' # Convert sleep periods to wake periods
-#' wake_from_sleep <- sleepwaker(sleep_periods, input.type = "sleep",
+#' wake_from_sleep <- sleepwaker(sleep_periods,
+#'                               input.type = "sleep",
 #'                               output.type = "wake")
 #'
 #' \donttest{
-#' # Save results to CSV file
-#' wake_periods <- sleepwaker(batch_data, input.type = "raw",
-#'                            output.type = "wake",
-#'                            output.file = "wake_periods.csv")
+#'   # Save results to CSV file
+#'   wake_periods <- sleepwaker(sample.data,
+#'                              input.type = "raw",
+#'                              output.type = "wake",
+#'                              output.file = "wake_periods.csv")
 #' }
 #'
 #' @references

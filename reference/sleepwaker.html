@@ -102,36 +102,30 @@ cannot recover original sleep periods.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Create sample batch export data</span></span></span>
-<span class="r-in"><span><span class="va">batch_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="st">"Subject Name"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S001"</span>, <span class="st">"S001"</span>, <span class="st">"S002"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"In Bed Time"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"09/19/2024 11:00:00 PM"</span>, <span class="st">"09/20/2024 10:30:00 PM"</span>,</span></span>
-<span class="r-in"><span>                    <span class="st">"09/19/2024 11:15:00 PM"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"Out Bed Time"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"09/20/2024 07:00:00 AM"</span>, <span class="st">"09/21/2024 06:45:00 AM"</span>,</span></span>
-<span class="r-in"><span>                     <span class="st">"09/20/2024 07:30:00 AM"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Load real sample data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sample.data</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert raw data to sleep periods</span></span></span>
-<span class="r-in"><span><span class="va">sleep_periods</span> <span class="op">&lt;-</span> <span class="fu">sleepwaker</span><span class="op">(</span><span class="va">batch_data</span>, input.type <span class="op">=</span> <span class="st">"raw"</span>,</span></span>
+<span class="r-in"><span><span class="va">sleep_periods</span> <span class="op">&lt;-</span> <span class="fu">sleepwaker</span><span class="op">(</span><span class="va">sample.data</span>,</span></span>
+<span class="r-in"><span>                            input.type <span class="op">=</span> <span class="st">"raw"</span>,</span></span>
 <span class="r-in"><span>                            output.type <span class="op">=</span> <span class="st">"sleep"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert raw data to wake periods</span></span></span>
-<span class="r-in"><span><span class="va">wake_periods</span> <span class="op">&lt;-</span> <span class="fu">sleepwaker</span><span class="op">(</span><span class="va">batch_data</span>, input.type <span class="op">=</span> <span class="st">"raw"</span>,</span></span>
+<span class="r-in"><span><span class="va">wake_periods</span> <span class="op">&lt;-</span> <span class="fu">sleepwaker</span><span class="op">(</span><span class="va">sample.data</span>,</span></span>
+<span class="r-in"><span>                           input.type <span class="op">=</span> <span class="st">"raw"</span>,</span></span>
 <span class="r-in"><span>                           output.type <span class="op">=</span> <span class="st">"wake"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Subject S002 has fewer than 2 periods. Skipping.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert sleep periods to wake periods</span></span></span>
-<span class="r-in"><span><span class="va">wake_from_sleep</span> <span class="op">&lt;-</span> <span class="fu">sleepwaker</span><span class="op">(</span><span class="va">sleep_periods</span>, input.type <span class="op">=</span> <span class="st">"sleep"</span>,</span></span>
+<span class="r-in"><span><span class="va">wake_from_sleep</span> <span class="op">&lt;-</span> <span class="fu">sleepwaker</span><span class="op">(</span><span class="va">sleep_periods</span>,</span></span>
+<span class="r-in"><span>                              input.type <span class="op">=</span> <span class="st">"sleep"</span>,</span></span>
 <span class="r-in"><span>                              output.type <span class="op">=</span> <span class="st">"wake"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Subject S002 has fewer than 2 periods. Skipping.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co"># Save results to CSV file</span></span></span>
-<span class="r-in"><span><span class="va">wake_periods</span> <span class="op">&lt;-</span> <span class="fu">sleepwaker</span><span class="op">(</span><span class="va">batch_data</span>, input.type <span class="op">=</span> <span class="st">"raw"</span>,</span></span>
-<span class="r-in"><span>                           output.type <span class="op">=</span> <span class="st">"wake"</span>,</span></span>
-<span class="r-in"><span>                           output.file <span class="op">=</span> <span class="st">"wake_periods.csv"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Subject S002 has fewer than 2 periods. Skipping.</span>
+<span class="r-in"><span>  <span class="co"># Save results to CSV file</span></span></span>
+<span class="r-in"><span>  <span class="va">wake_periods</span> <span class="op">&lt;-</span> <span class="fu">sleepwaker</span><span class="op">(</span><span class="va">sample.data</span>,</span></span>
+<span class="r-in"><span>                             input.type <span class="op">=</span> <span class="st">"raw"</span>,</span></span>
+<span class="r-in"><span>                             output.type <span class="op">=</span> <span class="st">"wake"</span>,</span></span>
+<span class="r-in"><span>                             output.file <span class="op">=</span> <span class="st">"wake_periods.csv"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Results saved to: wake_periods.csv</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

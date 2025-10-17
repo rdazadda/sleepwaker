@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2025 Raymond Dacosta Azadda
+Copyright (c) 2025 Raymond Dacosta Azadda, Andrew Grogan-Kaylor, and KyungSook Lee
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

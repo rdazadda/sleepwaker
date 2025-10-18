@@ -172,19 +172,33 @@ The function displays a confirmation message when files are saved successfully.
 
 
 Why?: Once sleep periods are inverted to wake periods, the final sleep period is lost. Attempting to reconstruct it would require guessing, which would be scientifically invalid.
-
 # Troubleshooting
 
 ## Common Issues
 
-### Issue 1: Datetime Parsing Error
+### Issue 1: Datetime Format Problems
 
-**Error message:**
+Error message:
 ```
-Error: Could not parse datetime. Check format is MM/DD/YYYY HH:MM:SS AM/PM
+Error: Could not parse datetime
 ```
 
-Solution: Verify your ActiLife export uses 12-hour time format with AM/PM. Re-export if necessary.
+Solution: Check your data format first:
+```{r validate-example, eval=FALSE}
+validate.sleep.data(your_data, verbose = TRUE)
+```
+
+If parsing fails, standardize the format:
+```{r fix-format, eval=FALSE}
+your_data$`In Bed Time` <- standardize.datetime(your_data$`In Bed Time`)
+your_data$`Out Bed Time` <- standardize.datetime(your_data$`Out Bed Time`)
+```
+
+The package handles these formats automatically:
+- MM/DD/YYYY HH:MM:SS AM/PM (preferred)
+- MM/DD/YYYY HH:MM:SS (24-hour)
+- MM/DD/YYYY HH:MM AM/PM
+- MM/DD/YYYY HH:MM
 
 ### Issue 2: Missing Required Columns
 
@@ -193,7 +207,12 @@ Error message:
 Error: Missing required columns: In Bed Time
 ```
 
-Solution:Ensure your CSV contains all three required columns exactly as named in ActiLife batch sleep export.
+Solution: Check your column names match exactly:
+- Subject Name
+- In Bed Time
+- Out Bed Time
+
+Column names are case-sensitive.
 
 ### Issue 3: Insufficient Data Warning
 
@@ -202,9 +221,10 @@ Warning message:
 Warning: Subject A001 has fewer than 2 periods. Skipping.
 ```
 
-Explanation:Inversion requires at least 2 sleep periods per subject. Subjects with only 1 sleep period are skipped.
+Explanation: Wake period calculation requires at least 2 sleep periods per subject. Subjects with only 1 sleep period are skipped.
 
 Action: Review why the subject has limited data (short monitoring period, device removal, or algorithm failure).
+
 
 # Getting Help
 

@@ -5,7 +5,7 @@
 #' periods in a single step.
 #'
 #' @param sleep.data Data frame with columns 'Subject Name', 'In Bed Time',
-#'   and 'Out Bed Time'. Datetime format must be MM/DD/YYYY HH:MM:SS AM/PM
+#'   and 'Out Bed Time'. Multiple datetime formats supported.
 #' @param output.type Character string: "sleep" for sleep periods (default)
 #'   or "wake" for wake periods
 #'
@@ -13,15 +13,9 @@
 #'   'Off Date', 'Off Time', and 'Category'
 #'
 #' @examples
-#' sample_data <- data.frame(
-#'   "Subject Name" = c("S001", "S001"),
-#'   "In Bed Time" = c("09/19/2024 11:00:00 PM", "09/20/2024 10:30:00 PM"),
-#'   "Out Bed Time" = c("09/20/2024 07:00:00 AM", "09/21/2024 06:45:00 AM"),
-#'   check.names = FALSE
-#' )
-#'
-#' sleep_log <- create.subject.log(sample_data, output.type = "sleep")
-#' wake_log <- create.subject.log(sample_data, output.type = "wake")
+#' data(sample.data)
+#' sleep.log <- create.subject.log(sample.data, output.type = "sleep")
+#' wake.log <- create.subject.log(sample.data, output.type = "wake")
 #'
 #' @export
 create.subject.log <- function(sleep.data, output.type = "sleep") {
@@ -34,23 +28,23 @@ create.subject.log <- function(sleep.data, output.type = "sleep") {
   missing.cols <- setdiff(required.cols, colnames(sleep.data))
 
   if (length(missing.cols) > 0) {
-    stop(paste("Missing required columns:", paste(missing.cols, collapse = ", ")))
+    stop("Missing required columns: ", paste(missing.cols, collapse = ", "))
   }
 
   if (!output.type %in% c("sleep", "wake")) {
     stop("output.type must be 'sleep' or 'wake'")
   }
 
-  # NEW: normalize spaces so "10/7/2025  10:45:00 PM" parses
-  .normalize <- function(x) trimws(gsub("\\s+", " ", chartr("\u00A0"," ", as.character(x))))
+  # Use flexible parsing
+  in.bed.dt  <- parse.datetime.flexible(sleep.data$`In Bed Time`)
+  out.bed.dt <- parse.datetime.flexible(sleep.data$`Out Bed Time`)
 
-  in.bed.dt  <- as.POSIXct(.normalize(sleep.data$`In Bed Time`),  format = "%m/%d/%Y %I:%M:%S %p")
-  out.bed.dt <- as.POSIXct(.normalize(sleep.data$`Out Bed Time`), format = "%m/%d/%Y %I:%M:%S %p")
-
-  if (all(is.na(in.bed.dt)) || all(is.na(out.bed.dt))) {
-    stop("Could not parse datetime. Check format is MM/DD/YYYY HH:MM:SS AM/PM")
+  # Check for parsing failures
+  if (any(is.na(in.bed.dt)) || any(is.na(out.bed.dt))) {
+    stop("Could not parse datetime. Run validate.sleep.data(your_data, verbose = TRUE)")
   }
 
+  # Create subject log
   subject.log <- data.frame(
     `Subject Name` = sleep.data$`Subject Name`,
     `On Date` = format(in.bed.dt, "%m/%d/%Y"),

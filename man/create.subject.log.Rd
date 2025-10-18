@@ -8,7 +8,7 @@ create.subject.log(sleep.data, output.type = "sleep")
 }
 \arguments{
 \item{sleep.data}{Data frame with columns 'Subject Name', 'In Bed Time',
-and 'Out Bed Time'. Datetime format must be MM/DD/YYYY HH:MM:SS AM/PM}
+and 'Out Bed Time'. Multiple datetime formats supported.}
 
 \item{output.type}{Character string: "sleep" for sleep periods (default)
 or "wake" for wake periods}
@@ -23,14 +23,8 @@ into separate date and time columns. Optionally inverts sleep periods to wake
 periods in a single step.
 }
 \examples{
-sample_data <- data.frame(
-  "Subject Name" = c("S001", "S001"),
-  "In Bed Time" = c("09/19/2024 11:00:00 PM", "09/20/2024 10:30:00 PM"),
-  "Out Bed Time" = c("09/20/2024 07:00:00 AM", "09/21/2024 06:45:00 AM"),
-  check.names = FALSE
-)
-
-sleep_log <- create.subject.log(sample_data, output.type = "sleep")
-wake_log <- create.subject.log(sample_data, output.type = "wake")
+data(sample.data)
+sleep.log <- create.subject.log(sample.data, output.type = "sleep")
+wake.log <- create.subject.log(sample.data, output.type = "wake")
 
 }

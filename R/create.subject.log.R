@@ -41,8 +41,11 @@ create.subject.log <- function(sleep.data, output.type = "sleep") {
     stop("output.type must be 'sleep' or 'wake'")
   }
 
-  in.bed.dt <- as.POSIXct(sleep.data$`In Bed Time`, format = "%m/%d/%Y %I:%M:%S %p")
-  out.bed.dt <- as.POSIXct(sleep.data$`Out Bed Time`, format = "%m/%d/%Y %I:%M:%S %p")
+  # NEW: normalize spaces so "10/7/2025  10:45:00 PM" parses
+  .normalize <- function(x) trimws(gsub("\\s+", " ", chartr("\u00A0"," ", as.character(x))))
+
+  in.bed.dt  <- as.POSIXct(.normalize(sleep.data$`In Bed Time`),  format = "%m/%d/%Y %I:%M:%S %p")
+  out.bed.dt <- as.POSIXct(.normalize(sleep.data$`Out Bed Time`), format = "%m/%d/%Y %I:%M:%S %p")
 
   if (all(is.na(in.bed.dt)) || all(is.na(out.bed.dt))) {
     stop("Could not parse datetime. Check format is MM/DD/YYYY HH:MM:SS AM/PM")

@@ -57,7 +57,7 @@ periods in a single step.</p>
 
 <dl><dt id="arg-sleep-data">sleep.data<a class="anchor" aria-label="anchor" href="#arg-sleep-data"></a></dt>
 <dd><p>Data frame with columns 'Subject Name', 'In Bed Time',
-and 'Out Bed Time'. Datetime format must be MM/DD/YYYY HH:MM:SS AM/PM</p></dd>
+and 'Out Bed Time'. Multiple datetime formats supported.</p></dd>
 
 
 <dt id="arg-output-type">output.type<a class="anchor" aria-label="anchor" href="#arg-output-type"></a></dt>
@@ -73,15 +73,9 @@ or "wake" for wake periods</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="st">"Subject Name"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S001"</span>, <span class="st">"S001"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"In Bed Time"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"09/19/2024 11:00:00 PM"</span>, <span class="st">"09/20/2024 10:30:00 PM"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"Out Bed Time"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"09/20/2024 07:00:00 AM"</span>, <span class="st">"09/21/2024 06:45:00 AM"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">sleep_log</span> <span class="op">&lt;-</span> <span class="fu">create.subject.log</span><span class="op">(</span><span class="va">sample_data</span>, output.type <span class="op">=</span> <span class="st">"sleep"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">wake_log</span> <span class="op">&lt;-</span> <span class="fu">create.subject.log</span><span class="op">(</span><span class="va">sample_data</span>, output.type <span class="op">=</span> <span class="st">"wake"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sample.data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sleep.log</span> <span class="op">&lt;-</span> <span class="fu">create.subject.log</span><span class="op">(</span><span class="va">sample.data</span>, output.type <span class="op">=</span> <span class="st">"sleep"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wake.log</span> <span class="op">&lt;-</span> <span class="fu">create.subject.log</span><span class="op">(</span><span class="va">sample.data</span>, output.type <span class="op">=</span> <span class="st">"wake"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

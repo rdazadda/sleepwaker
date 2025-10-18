@@ -173,11 +173,11 @@ periods.</p>
 <span><span class="co"># Display first few formatted sleep periods</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sleep.periods</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Subject Name    On Date     On Time   Off Date    Off Time Category</span></span>
-<span><span class="co">#&gt; 1           KL 10/07/2025 10:45:00 PM 10/08/2025 07:09:00 AM         </span></span>
-<span><span class="co">#&gt; 2           KL 10/08/2025 07:55:00 AM 10/08/2025 10:56:00 AM         </span></span>
-<span><span class="co">#&gt; 3           KL 10/08/2025 11:34:00 PM 10/09/2025 07:50:00 AM         </span></span>
-<span><span class="co">#&gt; 4           KL 10/09/2025 11:46:00 PM 10/10/2025 07:02:00 AM         </span></span>
-<span><span class="co">#&gt; 5         A001 10/09/2025 12:46:00 AM 10/09/2025 06:07:00 AM</span></span></code></pre></div>
+<span><span class="co">#&gt; 1         A001 10/07/2025 10:45:00 PM 10/08/2025 07:09:00 AM         </span></span>
+<span><span class="co">#&gt; 2         A001 10/08/2025 07:55:00 AM 10/08/2025 10:56:00 AM         </span></span>
+<span><span class="co">#&gt; 3         A001 10/08/2025 11:34:00 PM 10/09/2025 07:50:00 AM         </span></span>
+<span><span class="co">#&gt; 4         A001 10/09/2025 11:46:00 PM 10/10/2025 07:02:00 AM         </span></span>
+<span><span class="co">#&gt; 5         A002 10/09/2025 12:46:00 AM 10/09/2025 06:07:00 AM</span></span></code></pre></div>
 <p><strong>What happened:</strong></p>
 <ul>
 <li>Batch export was reformatted into subject log diary format</li>
@@ -198,11 +198,11 @@ need to exclude sleep.</p>
 <span><span class="co"># Display first few wake periods</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">wake.periods</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Subject Name    On Date     On Time   Off Date    Off Time Category</span></span>
-<span><span class="co">#&gt; 1           KL 10/08/2025 07:09:00 AM 10/08/2025 07:55:00 AM         </span></span>
-<span><span class="co">#&gt; 2           KL 10/08/2025 10:56:00 AM 10/08/2025 11:34:00 PM         </span></span>
-<span><span class="co">#&gt; 3           KL 10/09/2025 07:50:00 AM 10/09/2025 11:46:00 PM         </span></span>
-<span><span class="co">#&gt; 4         A001 10/09/2025 06:07:00 AM 10/09/2025 06:24:00 AM         </span></span>
-<span><span class="co">#&gt; 5         A001 10/09/2025 09:07:00 AM 10/09/2025 10:53:00 PM</span></span></code></pre></div>
+<span><span class="co">#&gt; 1         A001 10/08/2025 07:09:00 AM 10/08/2025 07:55:00 AM         </span></span>
+<span><span class="co">#&gt; 2         A001 10/08/2025 10:56:00 AM 10/08/2025 11:34:00 PM         </span></span>
+<span><span class="co">#&gt; 3         A001 10/09/2025 07:50:00 AM 10/09/2025 11:46:00 PM         </span></span>
+<span><span class="co">#&gt; 4         A002 10/09/2025 06:07:00 AM 10/09/2025 06:24:00 AM         </span></span>
+<span><span class="co">#&gt; 5         A002 10/09/2025 09:07:00 AM 10/09/2025 10:53:00 PM</span></span></code></pre></div>
 <p><strong>What happened:</strong></p>
 <ul>
 <li>Sleep periods were inverted to create wake periods</li>
@@ -273,37 +273,42 @@ successfully. ## Important Notes</p>
 </ul>
 <p>Why?: Once sleep periods are inverted to wake periods, the final
 sleep period is lost. Attempting to reconstruct it would require
-guessing, which would be scientifically invalid.</p>
-</div>
-<div class="section level2">
-<h2 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
-</h2>
+guessing, which would be scientifically invalid. # Troubleshooting</p>
 <div class="section level3">
 <h3 id="common-issues">Common Issues<a class="anchor" aria-label="anchor" href="#common-issues"></a>
 </h3>
 <div class="section level4">
-<h4 id="issue-1-datetime-parsing-error">Issue 1: Datetime Parsing Error<a class="anchor" aria-label="anchor" href="#issue-1-datetime-parsing-error"></a>
+<h4 id="issue-1-datetime-format-problems">Issue 1: Datetime Format Problems<a class="anchor" aria-label="anchor" href="#issue-1-datetime-format-problems"></a>
 </h4>
-<p><strong>Error message:</strong></p>
-<pre><code>Error: Could not parse datetime. Check format is MM/DD/YYYY HH:MM:SS AM/PM</code></pre>
-<p>Solution: Verify your ActiLife export uses 12-hour time format with
-AM/PM. Re-export if necessary.</p>
+<p>Error message:</p>
+<pre><code>Error: Could not parse datetime</code></pre>
+<p>Solution: Check your data format first:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/validate.sleep.data.html">validate.sleep.data</a></span><span class="op">(</span><span class="va">your_data</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>If parsing fails, standardize the format:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">your_data</span><span class="op">$</span><span class="va">`In Bed Time`</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.datetime.html">standardize.datetime</a></span><span class="op">(</span><span class="va">your_data</span><span class="op">$</span><span class="va">`In Bed Time`</span><span class="op">)</span></span>
+<span><span class="va">your_data</span><span class="op">$</span><span class="va">`Out Bed Time`</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.datetime.html">standardize.datetime</a></span><span class="op">(</span><span class="va">your_data</span><span class="op">$</span><span class="va">`Out Bed Time`</span><span class="op">)</span></span></code></pre></div>
+<p>The package handles these formats automatically: - MM/DD/YYYY
+HH:MM:SS AM/PM (preferred) - MM/DD/YYYY HH:MM:SS (24-hour) - MM/DD/YYYY
+HH:MM AM/PM - MM/DD/YYYY HH:MM</p>
 </div>
 <div class="section level4">
 <h4 id="issue-2-missing-required-columns">Issue 2: Missing Required Columns<a class="anchor" aria-label="anchor" href="#issue-2-missing-required-columns"></a>
 </h4>
 <p>Error message:</p>
 <pre><code>Error: Missing required columns: In Bed Time</code></pre>
-<p>Solution:Ensure your CSV contains all three required columns exactly
-as named in ActiLife batch sleep export.</p>
+<p>Solution: Check your column names match exactly: - Subject Name - In
+Bed Time - Out Bed Time</p>
+<p>Column names are case-sensitive.</p>
 </div>
 <div class="section level4">
 <h4 id="issue-3-insufficient-data-warning">Issue 3: Insufficient Data Warning<a class="anchor" aria-label="anchor" href="#issue-3-insufficient-data-warning"></a>
 </h4>
 <p>Warning message:</p>
 <pre><code>Warning: Subject A001 has fewer than 2 periods. Skipping.</code></pre>
-<p>Explanation:Inversion requires at least 2 sleep periods per subject.
-Subjects with only 1 sleep period are skipped.</p>
+<p>Explanation: Wake period calculation requires at least 2 sleep
+periods per subject. Subjects with only 1 sleep period are skipped.</p>
 <p>Action: Review why the subject has limited data (short monitoring
 period, device removal, or algorithm failure).</p>
 </div>

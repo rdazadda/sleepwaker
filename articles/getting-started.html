@@ -289,9 +289,13 @@ guessing, which would be scientifically invalid. # Troubleshooting</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">your_data</span><span class="op">$</span><span class="va">`In Bed Time`</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.datetime.html">standardize.datetime</a></span><span class="op">(</span><span class="va">your_data</span><span class="op">$</span><span class="va">`In Bed Time`</span><span class="op">)</span></span>
 <span><span class="va">your_data</span><span class="op">$</span><span class="va">`Out Bed Time`</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize.datetime.html">standardize.datetime</a></span><span class="op">(</span><span class="va">your_data</span><span class="op">$</span><span class="va">`Out Bed Time`</span><span class="op">)</span></span></code></pre></div>
-<p>The package handles these formats automatically: - MM/DD/YYYY
-HH:MM:SS AM/PM (preferred) - MM/DD/YYYY HH:MM:SS (24-hour) - MM/DD/YYYY
-HH:MM AM/PM - MM/DD/YYYY HH:MM</p>
+<p>The package handles these formats automatically:</p>
+<ul>
+<li><p>MM/DD/YYYY HH:MM:SS AM/PM (preferred)</p></li>
+<li><p>MM/DD/YYYY HH:MM:SS (24-hour)</p></li>
+<li><p>MM/DD/YYYY HH:MM AM/PM</p></li>
+<li><p>MM/DD/YYYY HH:MM</p></li>
+</ul>
 </div>
 <div class="section level4">
 <h4 id="issue-2-missing-required-columns">Issue 2: Missing Required Columns<a class="anchor" aria-label="anchor" href="#issue-2-missing-required-columns"></a>

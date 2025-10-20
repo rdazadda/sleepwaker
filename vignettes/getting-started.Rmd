@@ -195,9 +195,13 @@ your_data$`Out Bed Time` <- standardize.datetime(your_data$`Out Bed Time`)
 ```
 
 The package handles these formats automatically:
+
 - MM/DD/YYYY HH:MM:SS AM/PM (preferred)
+
 - MM/DD/YYYY HH:MM:SS (24-hour)
+
 - MM/DD/YYYY HH:MM AM/PM
+
 - MM/DD/YYYY HH:MM
 
 ### Issue 2: Missing Required Columns

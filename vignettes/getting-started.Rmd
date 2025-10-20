@@ -212,8 +212,11 @@ Error: Missing required columns: In Bed Time
 ```
 
 Solution: Check your column names match exactly:
+
 - Subject Name
+
 - In Bed Time
+
 - Out Bed Time
 
 Column names are case-sensitive.

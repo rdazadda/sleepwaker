@@ -1,0 +1,4 @@
+# License
+
+    YEAR: 2025
+    COPYRIGHT HOLDER: Raymond Dacosta Azadda, Andrew Grogan-Kaylor, and KyungSook Lee

@@ -7,6 +7,8 @@
 <url><loc>https://rdazadda.github.io/sleepwaker/authors.html</loc></url>
 <url><loc>https://rdazadda.github.io/sleepwaker/index.html</loc></url>
 <url><loc>https://rdazadda.github.io/sleepwaker/reference/create.subject.log.html</loc></url>
+<url><loc>https://rdazadda.github.io/sleepwaker/reference/dot-check_required_columns.html</loc></url>
+<url><loc>https://rdazadda.github.io/sleepwaker/reference/dot-validate_dataframe.html</loc></url>
 <url><loc>https://rdazadda.github.io/sleepwaker/reference/extract.sleep.columns.html</loc></url>
 <url><loc>https://rdazadda.github.io/sleepwaker/reference/index.html</loc></url>
 <url><loc>https://rdazadda.github.io/sleepwaker/reference/invert.periods.html</loc></url>
@@ -15,6 +17,7 @@
 <url><loc>https://rdazadda.github.io/sleepwaker/reference/sleepwaker-package.html</loc></url>
 <url><loc>https://rdazadda.github.io/sleepwaker/reference/sleepwaker.html</loc></url>
 <url><loc>https://rdazadda.github.io/sleepwaker/reference/standardize.datetime.html</loc></url>
+<url><loc>https://rdazadda.github.io/sleepwaker/reference/utils.html</loc></url>
 <url><loc>https://rdazadda.github.io/sleepwaker/reference/validate.sleep.data.html</loc></url>
 </urlset>
 

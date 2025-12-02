@@ -1,0 +1,55 @@
+# Invert Sleep and Wake Periods
+
+Converts sleep periods to wake periods or vice versa by pairing
+consecutive periods. The end time of period N becomes the start time of
+the inverted period, and the start time of period N+1 becomes the end
+time, creating complement periods between consecutive sleep or wake
+episodes.
+
+## Usage
+
+``` r
+invert.periods(subject.log, period.type = "sleep")
+```
+
+## Arguments
+
+- subject.log:
+
+  Data frame with columns 'Subject Name', 'On Date', 'On Time', 'Off
+  Date', 'Off Time', and 'Category'
+
+- period.type:
+
+  Character string: "sleep" or "wake" indicating input data type
+
+## Value
+
+Data frame with inverted periods in same format as input. Output
+contains one fewer period per subject as the final period cannot be
+inverted without a subsequent period
+
+## Details
+
+The inversion algorithm processes each subject independently, sorting
+periods chronologically before pairing consecutive entries. Subjects
+with fewer than 2 periods are skipped with a warning.
+
+Converting wake to sleep is permitted but generates a warning as it
+results in compounded data loss.
+
+## Examples
+
+``` r
+sleep_data <- data.frame(
+  "Subject Name" = c("S001", "S001", "S001"),
+  "On Date" = c("09/19/2024", "09/20/2024", "09/21/2024"),
+  "On Time" = c("11:00:00 PM", "10:30:00 PM", "11:15:00 PM"),
+  "Off Date" = c("09/20/2024", "09/21/2024", "09/22/2024"),
+  "Off Time" = c("07:00:00 AM", "06:45:00 AM", "07:30:00 AM"),
+  "Category" = c("", "", ""),
+  check.names = FALSE
+)
+
+wake_data <- invert.periods(sleep_data, period.type = "sleep")
+```

@@ -50,8 +50,8 @@ sleep.periods <- sleepwaker(data,
                             output.type = "sleep")
 ```
 
-Converts batch sleep export → subject log diary format for sleep pattern
-analysis
+Converts batch sleep export to subject log diary format for sleep
+pattern analysis
 
 ### Workflow 2: Wake Period Analysis
 
@@ -62,7 +62,7 @@ wake.periods <- sleepwaker(data,
                            output.type = "wake")
 ```
 
-Inverts sleep periods → wake periods, enabling analysis of waking
+Inverts sleep periods to wake periods, enabling analysis of waking
 behavior only
 
 ## How It Works

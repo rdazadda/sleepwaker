@@ -3,7 +3,7 @@
 \docType{package}
 \name{sleepwaker-package}
 \alias{sleepwaker-package}
-\title{sleepwaker: Invert Sleep and Wake Periods from Accelerometry Data}
+\title{sleepwaker: Detect Sleep and Wake Periods from Accelerometry Data}
 \description{
 Processes batch sleep export data from accelerometry devices and inverts sleep periods to wake periods. Uses output from validated sleep detection algorithms (Cole-Kripke (Adult), Sadeh (Youth)) to create wake periods, which enable researchers to constrain physical activity analysis to waking hours only. This prevents artificial inflation of sedentary time estimates by excluding sleep from behavioral assessments. Provides automated workflow for large-scale accelerometry studies.
 }

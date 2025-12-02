@@ -38,7 +38,7 @@ library(sleepwaker)
 
 ## Input Requirements
 
-**`Sleepwaker`** requires batch sleep export data from ActiGraph ActiLife with three columns:
+**`sleepwaker`** requires batch sleep export data from ActiGraph ActiLife with three columns:
 
 - **Subject Name**: Unique identifier for each participant
 - **In Bed Time**: Datetime when participant went to bed (mm/dd/yyyy hh:mm:ss AM/PM)
@@ -251,8 +251,8 @@ Action: Review why the subject has limited data (short monitoring period, device
 
 If you use **`sleepwaker`** in your research, please cite:
 ```
-Azadda, R.D., Grogan-Kaylor, A., & Lee, K. (2025). sleepwaker: 
-  Invert Sleep and Wake Periods from Accelerometry Data. 
+Azadda, R.D., Grogan-Kaylor, A., & Lee, K. (2025). sleepwaker:
+  Detect Sleep and Wake Periods from Accelerometry Data.
   R package version 0.1.0. https://github.com/rdazadda/sleepwaker
 ```
 

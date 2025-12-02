@@ -1,5 +1,5 @@
 Package: sleepwaker
-Title: Invert Sleep and Wake Periods from Accelerometry Data
+Title: Detect Sleep and Wake Periods from Accelerometry Data
 Version: 0.1.0
 Authors@R: c(
     person("Raymond Dacosta", "Azadda", 

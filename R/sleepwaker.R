@@ -23,7 +23,7 @@
 #'   'Off Time', and 'Category', representing either sleep or wake periods as specified.
 #'
 #' @details
-#' The inversion algorithm or let me say  pairs consecutive periods, using the end time of period N
+#' The inversion algorithm pairs consecutive periods, using the end time of period N
 #' as the start of the inverted period, and the start time of period N+1 as the end.
 #' This creates complement periods between consecutive sleep or wake episodes.
 #' Note that the output contains one fewer period per subject than the input, as the
@@ -94,8 +94,13 @@ sleepwaker <- function(data, input.type = "raw", output.type = "sleep",
   }
 
   if (!is.null(output.file)) {
-    write.csv(result, file = output.file, row.names = FALSE)
-    message("Results saved to: ", output.file)
+    tryCatch({
+      write.csv(result, file = output.file, row.names = FALSE)
+      message("Results saved to: ", output.file)
+    }, error = function(e) {
+      stop("sleepwaker: Failed to write output file '", output.file, "': ",
+           conditionMessage(e), call. = FALSE)
+    })
   }
 
   return(result)

@@ -32,7 +32,7 @@ to invert sleep periods into wake periods, which enables analysis constrained to
 waking hours and prevents artificial inflation of sedentary time estimates.
 }
 \details{
-The inversion algorithm or let me say  pairs consecutive periods, using the end time of period N
+The inversion algorithm pairs consecutive periods, using the end time of period N
 as the start of the inverted period, and the start time of period N+1 as the end.
 This creates complement periods between consecutive sleep or wake episodes.
 Note that the output contains one fewer period per subject than the input, as the

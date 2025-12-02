@@ -26,8 +26,17 @@ parse.datetime.flexible <- function(datetime.string) {
   for (fmt in formats) {
     parsed <- suppressWarnings(as.POSIXct(datetime.string, format = fmt, tz = "UTC"))
     success.rate <- sum(!is.na(parsed)) / length(parsed)
-    if (success.rate > 0.5) return(parsed)
+    # Require 100% success for a format to be used
+    if (success.rate == 1.0) return(parsed)
+    # Accept >90% as best candidate if no perfect match found
+    if (success.rate > 0.9) {
+      best.parsed <- parsed
+      best.rate <- success.rate
+    }
   }
+
+  # Return best partial match if found (will trigger validation in calling functions)
+  if (exists("best.parsed")) return(best.parsed)
 
   return(rep(as.POSIXct(NA), length(datetime.string)))
 }
@@ -100,7 +109,9 @@ standardize.datetime <- function(datetime.string) {
   parsed <- parse.datetime.flexible(datetime.string)
 
   if (all(is.na(parsed))) {
-    stop("Could not parse datetime. Use validate.sleep.data() for diagnostics.")
+    sample.val <- if (length(datetime.string) > 0) datetime.string[1] else "(empty)"
+    stop("Unable to parse datetime: '", sample.val,
+         "'. Use validate.sleep.data() for diagnostics.", call. = FALSE)
   }
 
   format(parsed, "%m/%d/%Y %I:%M:%S %p")

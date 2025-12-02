@@ -14,7 +14,7 @@
 #'   subsequent period
 #'
 #' @details
-#' The inversion algorithm or method processes each subject independently, sorting periods
+#' The inversion algorithm processes each subject independently, sorting periods
 #' chronologically before pairing consecutive entries. Subjects with fewer than
 #' 2 periods are skipped with a warning.
 #'
@@ -56,14 +56,26 @@ invert.periods <- function(subject.log, period.type = "sleep") {
     warning("Converting wake to sleep not recommended. Information loss will occur.")
   }
 
-  subject.log$on.datetime <- as.POSIXct(
-    paste(subject.log$`On Date`, subject.log$`On Time`),
-    format = "%m/%d/%Y %I:%M:%S %p"
-  )
-  subject.log$off.datetime <- as.POSIXct(
-    paste(subject.log$`Off Date`, subject.log$`Off Time`),
-    format = "%m/%d/%Y %I:%M:%S %p"
-  )
+  # Parse datetimes using flexible parser
+  on.datetime.str <- paste(subject.log$`On Date`, subject.log$`On Time`)
+  off.datetime.str <- paste(subject.log$`Off Date`, subject.log$`Off Time`)
+
+  subject.log$on.datetime <- parse.datetime.flexible(on.datetime.str)
+  subject.log$off.datetime <- parse.datetime.flexible(off.datetime.str)
+
+  # Validate parsing succeeded
+ if (any(is.na(subject.log$on.datetime))) {
+    failed.idx <- which(is.na(subject.log$on.datetime))[1]
+    stop("invert.periods: Could not parse On Date/Time at row ", failed.idx,
+         ": '", on.datetime.str[failed.idx], "'",
+         call. = FALSE)
+  }
+  if (any(is.na(subject.log$off.datetime))) {
+    failed.idx <- which(is.na(subject.log$off.datetime))[1]
+    stop("invert.periods: Could not parse Off Date/Time at row ", failed.idx,
+         ": '", off.datetime.str[failed.idx], "'",
+         call. = FALSE)
+  }
 
   subjects <- unique(subject.log$`Subject Name`)
   inverted.list <- list()
@@ -78,19 +90,11 @@ invert.periods <- function(subject.log, period.type = "sleep") {
       next
     }
 
-    inverted.periods <- data.frame(
-      `Subject Name` = character(),
-      `On Date` = character(),
-      `On Time` = character(),
-      `Off Date` = character(),
-      `Off Time` = character(),
-      `Category` = character(),
-      check.names = FALSE,
-      stringsAsFactors = FALSE
-    )
+    # Pre-allocate list for efficiency (avoids O(n^2) rbind in loop)
+    period.list <- vector("list", n - 1)
 
     for (i in 1:(n - 1)) {
-      inverted.periods <- rbind(inverted.periods, data.frame(
+      period.list[[i]] <- data.frame(
         `Subject Name` = subj,
         `On Date` = subj.data$`Off Date`[i],
         `On Time` = subj.data$`Off Time`[i],
@@ -99,10 +103,10 @@ invert.periods <- function(subject.log, period.type = "sleep") {
         `Category` = "",
         check.names = FALSE,
         stringsAsFactors = FALSE
-      ))
+      )
     }
 
-    inverted.list[[subj]] <- inverted.periods
+    inverted.list[[subj]] <- do.call(rbind, period.list)
   }
 
   if (length(inverted.list) == 0) {

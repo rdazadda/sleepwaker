@@ -24,7 +24,7 @@ and the start time of period N+1 becomes the end time, creating complement
 periods between consecutive sleep or wake episodes.
 }
 \details{
-The inversion algorithm or method processes each subject independently, sorting periods
+The inversion algorithm processes each subject independently, sorting periods
 chronologically before pairing consecutive entries. Subjects with fewer than
 2 periods are skipped with a warning.
 
